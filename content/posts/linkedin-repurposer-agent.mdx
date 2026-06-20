@@ -1,0 +1,84 @@
+---
+title: "We built a Claude agent that turns our blog into LinkedIn carousels — automatically"
+date: "2026-06-20"
+description: "Every Saturday at 10:30am, an AI agent reads atsell.io/blog, finds the counter-intuitive angle, and emails us a carousel script + GPT image prompt. Here's how we built it and what we learned."
+category: "Agents"
+readTime: "6 min read"
+---
+
+## The problem
+
+We write good stuff on the atsell.io blog. Then it sits there.
+
+The team knew the content was there. We just never had bandwidth to turn it into LinkedIn posts consistently. Every week, someone would say "we should post that". Nobody did.
+
+So we automated it.
+
+## What we built
+
+A **Claude Managed Agent** that runs every Saturday at 10:30am Singapore time. It:
+
+1. Fetches the latest post from atsell.io/blog
+2. Finds the counter-intuitive angle (not just a summary)
+3. Writes a **7-slide carousel script** — hook, 5 content slides, CTA
+4. Generates a **ready-to-paste GPT image prompt** using our brand system (navy, gold, Playfair Display)
+5. Writes a **short hook** (2–4 lines) to post alongside the carousel
+6. Emails all three to jacob@atsell.io via Resend
+
+No manual work. No prompting. Just an email in the inbox every Saturday.
+
+## The technical setup
+
+**Platform:** Claude Managed Agents (platform.claude.com)
+
+**Model:** Claude Opus 4.8 — we use the most capable model because voice fidelity matters. Cheap models produce AI slop.
+
+**Schedule:** `30 2 * * 6` (UTC) = 10:30am Asia/Singapore every Saturday
+
+**Email:** Resend API — simpler than wiring up Gmail OAuth. Agent calls the REST endpoint directly with `curl`. Domain verified via Vercel auto-configure.
+
+**Vault:** RESEND_API_KEY stored in CMA vault, injected as environment variable at runtime.
+
+## The hardest part: voice
+
+The technical setup took a few hours. Getting the voice right took longer.
+
+The agent needed to sound like Jacob, not like a LinkedIn ghostwriter who's never left a WeWork.
+
+What worked:
+- Feeding it actual LinkedIn post examples as reference
+- Explicit "never write" rules: no "In today's fast-paced world", no "Let's dive in", no "Key takeaways"
+- Instructing it to find the **counter-intuitive angle** — the thing that pushes back on conventional wisdom, not just summarises the article
+- Singapore-specific framing: Shopee, Lazada, TikTok Shop, the actual market we operate in
+
+What didn't work:
+- Asking it to "write in a casual tone" — too vague, still produced generic output
+- Long-form posts — Jacob doesn't post walls of text; he posts carousels. The agent was originally writing a full LinkedIn post. That was wrong. The carousel IS the post.
+
+## The output format
+
+Three files, emailed every Saturday:
+
+**hook.md** — 2–4 lines. Goes in the LinkedIn caption above the carousel. Short, punchy, no explanation needed.
+
+**carousel-script.md** — 7 slides. Slide 1 is the hook that stops the scroll. Slides 2–6 are the content. Slide 7 is the CTA.
+
+**gpt-design-prompt.md** — A complete prompt to paste into GPT Image. Includes our brand colors (navy #1e3a5f, gold #e8a838), font guidance (Playfair Display headings), and the specific slide content to render.
+
+## What it costs
+
+One run uses roughly 15,000–20,000 tokens (Opus 4.8). At current pricing, each Saturday run costs under $0.50.
+
+Cheaper than a freelancer. Faster than a freelancer. Doesn't need a brief.
+
+## What's next
+
+- **v2:** Trigger on demand with a specific URL (not just the latest post)
+- **v3:** Pull from non-blog atsell.io pages — case studies, product pages
+- **v4:** Memory store to track which URLs have already been repurposed (avoid duplicates)
+
+The agent is already live. This post was written by a human. The Saturday carousel probably wasn't.
+
+---
+
+*Want to see the agent config or build something similar? Reach out at jacob@atsell.com.*
