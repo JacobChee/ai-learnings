@@ -27,10 +27,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <nav className="sticky top-0 z-30 bg-navy-dark border-b border-white/10">
           <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
             <Link href="/" className="flex items-center gap-3">
-              <span className="font-serif text-xl text-white tracking-tight">AI for Boomers</span>
+              <span className="font-serif text-base text-white tracking-tight">AI for Boomers</span>
             </Link>
             <div className="flex items-center gap-6">
-              <Link href="/" className="text-sm text-white/60 hover:text-white transition-colors">
+              <Link href="/" className="text-xs text-white/60 hover:text-white transition-colors">
                 All learnings
               </Link>
             </div>
@@ -41,8 +41,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
         <footer className="bg-navy-dark border-t border-white/10 py-10">
           <div className="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <span className="font-serif text-lg text-white">AI for Boomers</span>
-            <p className="text-sm text-white/40">
+            <span className="font-serif text-sm text-white">AI for Boomers</span>
+            <p className="text-xs text-white/40">
               Figuring it out one prompt at a time.
             </p>
           </div>
