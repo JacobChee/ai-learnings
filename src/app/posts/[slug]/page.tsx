@@ -113,15 +113,9 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
           </div>
         )}
 
-        <article className="bg-white rounded-[14px] border border-border-card p-5 sm:p-8">
-          <div className="prose prose-sm max-w-none prose-headings:font-serif prose-headings:text-navy prose-a:text-gold prose-a:no-underline hover:prose-a:underline prose-strong:text-navy-dark prose-code:text-navy prose-code:bg-offwhite prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-xs prose-blockquote:border-l-gold prose-blockquote:text-body-gray">
-            <MDXRemote source={post.content} components={{ Slide, Hook }} />
-          </div>
-        </article>
-
-        {/* End result images */}
+        {/* End result images — shown before the article */}
         {post.resultImages && post.resultImages.length > 0 && (
-          <div className="mt-6">
+          <div className="mb-5">
             <h2 className="font-serif text-base text-navy mb-3">End result</h2>
             <div className="flex gap-3 overflow-x-auto pb-3 snap-x snap-mandatory">
               {post.resultImages.map((src, i) => (
@@ -140,6 +134,12 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
             </div>
           </div>
         )}
+
+        <article className="bg-white rounded-[14px] border border-border-card p-5 sm:p-8">
+          <div className="prose prose-sm max-w-none prose-headings:font-serif prose-headings:text-navy prose-a:text-gold prose-a:no-underline hover:prose-a:underline prose-strong:text-navy-dark prose-code:text-navy prose-code:bg-offwhite prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-xs prose-blockquote:border-l-gold prose-blockquote:text-body-gray">
+            <MDXRemote source={post.content} components={{ Slide, Hook }} />
+          </div>
+        </article>
 
         <div className="mt-6 text-center">
           <Link
