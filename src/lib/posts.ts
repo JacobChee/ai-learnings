@@ -11,6 +11,11 @@ export interface PostMeta {
   description: string
   category: string
   readTime?: string
+  applicableScore?: number
+  learningCurve?: 'Easy' | 'Moderate' | 'Steep'
+  skillLink?: string
+  sourceLink?: string
+  resultImages?: string[]
 }
 
 export interface Post extends PostMeta {
@@ -34,6 +39,11 @@ export function getAllPosts(): PostMeta[] {
       description: data.description ?? '',
       category: data.category ?? 'General',
       readTime: data.readTime,
+      applicableScore: data.applicableScore,
+      learningCurve: data.learningCurve,
+      skillLink: data.skillLink,
+      sourceLink: data.sourceLink,
+      resultImages: data.resultImages,
     }
   })
 
@@ -54,6 +64,11 @@ export function getPost(slug: string): Post | null {
     description: data.description ?? '',
     category: data.category ?? 'General',
     readTime: data.readTime,
+    applicableScore: data.applicableScore,
+    learningCurve: data.learningCurve,
+    skillLink: data.skillLink,
+    sourceLink: data.sourceLink,
+    resultImages: data.resultImages,
     content,
   }
 }

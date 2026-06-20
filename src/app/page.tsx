@@ -7,21 +7,16 @@ export default function Home() {
   return (
     <>
       {/* Hero */}
-      <section
-        className="bg-navy-dark py-24 px-6"
-        style={{ background: 'linear-gradient(135deg, #152a45 0%, #1e3a5f 100%)' }}
-      >
+      <section className="bg-offwhite py-24 px-6 border-b border-border-card">
         <div className="max-w-6xl mx-auto">
-          <span className="inline-block text-xs font-medium uppercase tracking-widest text-gold border border-gold/30 px-3 py-1 rounded-full mb-6">
-            AI Learnings
+          <span className="inline-block text-xs font-medium uppercase tracking-widest text-gold border border-gold/40 bg-gold/10 px-3 py-1 rounded-full mb-6">
+            Jacob&apos;s AI Learnings
           </span>
-          <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl text-white leading-tight max-w-2xl">
-            What we&apos;re building<br />
-            <span className="text-gold">with AI.</span>
+          <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl text-navy leading-tight max-w-2xl">
+            AI for Boomers
           </h1>
-          <p className="mt-6 text-lg text-white/60 max-w-xl font-sans leading-relaxed">
-            Real experiments, agents, and lessons from atsell.io — an ecommerce enabler
-            operating across Shopee, Lazada, and TikTok Shop in Southeast Asia.
+          <p className="mt-6 text-lg text-body-gray max-w-xl font-sans leading-relaxed">
+            Honest notes on what actually works — shared so the team doesn&apos;t have to start from scratch.
           </p>
         </div>
       </section>
@@ -56,7 +51,27 @@ export default function Home() {
                     <p className="text-sm text-body-gray leading-relaxed flex-1">
                       {post.description}
                     </p>
-                    <div className="mt-5 flex items-center justify-between">
+                    {(post.applicableScore !== undefined || post.learningCurve) && (
+                      <div className="mt-4 pt-4 border-t border-border-card flex items-center gap-3 flex-wrap">
+                        {post.applicableScore !== undefined && (
+                          <div className="flex flex-col gap-0.5">
+                            <span className="text-[10px] uppercase tracking-wider text-body-gray/60">Physio & Sole / Anjou</span>
+                            <span className="text-xs font-semibold text-navy">{post.applicableScore}/10 applicable</span>
+                          </div>
+                        )}
+                        {post.learningCurve && (
+                          <div className="flex flex-col gap-0.5 ml-auto text-right">
+                            <span className="text-[10px] uppercase tracking-wider text-body-gray/60">Learning curve</span>
+                            <span className={`text-xs font-semibold ${
+                              post.learningCurve === 'Easy' ? 'text-emerald-500' :
+                              post.learningCurve === 'Moderate' ? 'text-amber-500' :
+                              'text-red-500'
+                            }`}>{post.learningCurve}</span>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                    <div className="mt-4 flex items-center justify-between">
                       <time className="text-xs text-body-gray/70">
                         {new Date(post.date).toLocaleDateString('en-SG', {
                           year: 'numeric',

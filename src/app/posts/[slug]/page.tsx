@@ -11,7 +11,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params
   const post = getPost(slug)
   if (!post) return {}
-  return { title: `${post.title} — atsell AI Learnings`, description: post.description }
+  return { title: `${post.title} — Jacob Chee`, description: post.description }
 }
 
 export default async function PostPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -24,7 +24,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
       {/* Header */}
       <div
         className="py-16 px-6"
-        style={{ background: 'linear-gradient(135deg, #152a45 0%, #1e3a5f 100%)' }}
+        style={{ background: 'linear-gradient(135deg, #111111 0%, #1a1a1a 100%)' }}
       >
         <div className="max-w-3xl mx-auto">
           <Link
@@ -50,16 +50,85 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
             </time>
             {post.readTime && <span>· {post.readTime}</span>}
           </div>
+          {(post.applicableScore !== undefined || post.learningCurve) && (
+            <div className="flex items-center gap-6 mt-5 pt-5 border-t border-white/10">
+              {post.applicableScore !== undefined && (
+                <div>
+                  <p className="text-[10px] uppercase tracking-widest text-white/30 mb-1">Physio & Sole / Anjou Health</p>
+                  <p className="text-sm font-semibold text-white">{post.applicableScore}/10 applicable</p>
+                </div>
+              )}
+              {post.learningCurve && (
+                <div>
+                  <p className="text-[10px] uppercase tracking-widest text-white/30 mb-1">Learning curve</p>
+                  <p className={`text-sm font-semibold ${
+                    post.learningCurve === 'Easy' ? 'text-emerald-400' :
+                    post.learningCurve === 'Moderate' ? 'text-amber-400' :
+                    'text-red-400'
+                  }`}>{post.learningCurve}</p>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
 
       {/* Content */}
       <div className="max-w-3xl mx-auto px-6 py-14">
+
+        {/* Links strip */}
+        {(post.skillLink || post.sourceLink) && (
+          <div className="bg-white rounded-[18px] border border-border-card px-6 py-4 mb-6 flex flex-wrap gap-3">
+            {post.sourceLink && (
+              <a
+                href={post.sourceLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-xs font-medium text-body-gray hover:text-navy border border-border-card hover:border-gold/40 px-3 py-2 rounded-full transition-colors"
+              >
+                <span>📄</span> Source article
+              </a>
+            )}
+            {post.skillLink && (
+              <a
+                href={post.skillLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-xs font-medium text-white bg-gold hover:bg-gold-light px-3 py-2 rounded-full transition-colors"
+              >
+                <span>⚡</span> Download skill / template
+              </a>
+            )}
+          </div>
+        )}
+
         <article className="bg-white rounded-[18px] border border-border-card p-8 sm:p-12">
           <div className="prose prose-lg max-w-none prose-headings:font-serif prose-headings:text-navy prose-a:text-gold prose-a:no-underline hover:prose-a:underline prose-strong:text-navy-dark prose-code:text-navy prose-code:bg-offwhite prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-sm prose-blockquote:border-l-gold prose-blockquote:text-body-gray">
             <MDXRemote source={post.content} />
           </div>
         </article>
+
+        {/* End result images */}
+        {post.resultImages && post.resultImages.length > 0 && (
+          <div className="mt-8">
+            <h2 className="font-serif text-xl text-navy mb-4">End result</h2>
+            <div className="flex gap-4 overflow-x-auto pb-3 snap-x snap-mandatory">
+              {post.resultImages.map((src, i) => (
+                <a
+                  key={i}
+                  href={src}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="shrink-0 snap-start rounded-[14px] overflow-hidden border border-border-card hover:shadow-lg transition-shadow"
+                  style={{ width: 260 }}
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={src} alt={`Result ${i + 1}`} className="w-full h-auto object-cover" />
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
 
         <div className="mt-8 text-center">
           <Link

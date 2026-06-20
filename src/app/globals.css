@@ -2,13 +2,13 @@
 @plugin "@tailwindcss/typography";
 
 @theme {
-  --color-navy-dark: #152a45;
-  --color-navy: #1e3a5f;
-  --color-gold: #e8a838;
-  --color-gold-light: #f5c96a;
-  --color-offwhite: #f8f9fc;
-  --color-body-gray: #6b7a90;
-  --color-border-card: #e2e6ee;
+  --color-navy-dark: #111111;
+  --color-navy: #1a1a1a;
+  --color-gold: #f97316;
+  --color-gold-light: #fb923c;
+  --color-offwhite: #fdf8f3;
+  --color-body-gray: #6b7280;
+  --color-border-card: #e8e3dc;
 
   --font-serif: var(--font-playfair), Georgia, serif;
   --font-sans: var(--font-dm-sans), system-ui, sans-serif;
