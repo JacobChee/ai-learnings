@@ -6,7 +6,8 @@ category: "Agents"
 readTime: "6 min read"
 applicableScore: 9
 learningCurve: "Moderate"
-sourceLink: "https://atsell.io/blog"
+sourceLink: "https://atsell.io/blog/ecommerce-agency-account-exec"
+skillLink: "https://github.com/JacobChee/ai-learnings"
 resultImages:
   - "/results/linkedin-repurposer-agent/slide-1.png"
   - "/results/linkedin-repurposer-agent/slide-2.png"
@@ -42,6 +43,8 @@ No manual work. No prompting. Just an email in the inbox every Saturday.
 
 **Platform:** Claude Managed Agents (platform.claude.com)
 
+**Agent skill / config:** [github.com/JacobChee/ai-learnings](https://github.com/JacobChee/ai-learnings) — the `my-agent/` folder has the full agent config, outcome rubric, and kickoff prompt. Clone it and swap your own API key to run a copy.
+
 **Model:** Claude Opus 4.8 — we use the most capable model because voice fidelity matters. Cheap models produce AI slop.
 
 **Schedule:** `30 2 * * 6` (UTC) = 10:30am Asia/Singapore every Saturday
@@ -75,6 +78,60 @@ Three files, emailed every Saturday:
 **carousel-script.md** — 7 slides. Slide 1 is the hook that stops the scroll. Slides 2–6 are the content. Slide 7 is the CTA.
 
 **gpt-design-prompt.md** — A complete prompt to paste into GPT Image. Includes our brand colors (navy #1e3a5f, gold #e8a838), font guidance (Playfair Display headings), and the specific slide content to render.
+
+## Sample output — "You're not hiring the agency"
+
+Angle: Brands pick an ecommerce enabler by logos, badges and pitch decks. But results come down to one stretched-thin account exec you've never met.
+
+<Hook>
+You're not hiring the agency.
+
+You're hiring one overworked account exec. You just don't know their name yet.
+</Hook>
+
+<Slide number={1} label="Hook — stop the scroll" visual="Plain background, one laptop with a single browser tab glowing among 28 grey ones.">
+**You're not hiring the agency.**
+
+You're hiring one overworked account exec. You just don't know their name yet.
+</Slide>
+
+<Slide number={2} label="The wrong scoreboard" visual="A row of trophy badges crossed out in red.">
+**Everyone compares the wrong things.**
+
+Biggest logos. Most markets. "Official Partner" badges. None of it runs your store on sale night.
+</Slide>
+
+<Slide number={3} label="The deck isn't the service" visual="A glossy slide deck on one side, an empty desk chair on the other.">
+**The pitch deck is not the service.**
+
+The person who opens your store every morning never appears in the slides. Yet they decide everything.
+</Slide>
+
+<Slide number={4} label="Bigger does not mean better" visual="A huge org chart shrinking down to one tiny highlighted box.">
+**Size is not attention.**
+
+Big agencies standardise delivery. Standardised looks safe in a pitch — and goes silent during a campaign.
+</Slide>
+
+<Slide number={5} label="You're one of 28 tabs" visual="Browser window crammed with tabs, one barely visible.">
+**Your brand is one of 28 tabs.**
+
+When talent is split across 30 brands, your store gets whatever attention is left at 11pm before 6.6.
+</Slide>
+
+<Slide number={6} label="Ask the ugly questions" visual="Three blunt questions stacked as a checklist, no answers filled in.">
+**Ask the three ugly questions.**
+
+Who runs my account daily? How many brands do they carry? What happens to my store the day they leave?
+</Slide>
+
+<Slide number={7} label="Reframe" visual='Two name tags — "Big Agency" faded, "Your Account Lead" bold and circled.'>
+**Stop hiring the logo.**
+
+Hire the human who'll still be there when the sale goes live. That's the only spec sheet that matters.
+
+*Follow for more takes like this.*
+</Slide>
 
 ## What it costs
 

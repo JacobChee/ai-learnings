@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { MDXRemote } from 'next-mdx-remote/rsc'
 import { getPost, getAllPosts } from '@/lib/posts'
+import { Slide, Hook } from '@/components/mdx'
 
 export async function generateStaticParams() {
   return getAllPosts().map(p => ({ slug: p.slug }))
@@ -114,7 +115,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
 
         <article className="bg-white rounded-[18px] border border-border-card p-8 sm:p-12">
           <div className="prose prose-lg max-w-none prose-headings:font-serif prose-headings:text-navy prose-a:text-gold prose-a:no-underline hover:prose-a:underline prose-strong:text-navy-dark prose-code:text-navy prose-code:bg-offwhite prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-sm prose-blockquote:border-l-gold prose-blockquote:text-body-gray">
-            <MDXRemote source={post.content} />
+            <MDXRemote source={post.content} components={{ Slide, Hook }} />
           </div>
         </article>
 
