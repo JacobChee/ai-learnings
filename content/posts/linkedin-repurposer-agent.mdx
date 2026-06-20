@@ -9,6 +9,7 @@ learningCurve: "Moderate"
 sourceLink: "https://atsell.io/blog/intrepid-alternatives-singapore"
 skillLink: "https://github.com/anthropics/launch-your-agent"
 resultImages:
+  - "/results/linkedin-repurposer-agent/email-preview.png"
   - "/results/linkedin-repurposer-agent/slide-1.png"
   - "/results/linkedin-repurposer-agent/slide-2.png"
   - "/results/linkedin-repurposer-agent/slide-3.png"
@@ -49,7 +50,7 @@ No manual work. No prompting. Just an email in the inbox every Saturday.
 
 **Schedule:** `30 2 * * 6` (UTC) = 10:30am Asia/Singapore every Saturday
 
-**Email:** Resend API — simpler than wiring up Gmail OAuth. Agent calls the REST endpoint directly with `curl`. Domain verified via Vercel auto-configure.
+**Email:** Resend API — simpler than wiring up Gmail OAuth. Agent calls the REST endpoint directly with `curl`. Domain verified via Vercel auto-configure. Arrives from `agent@atsell.io` with subject "This week's LinkedIn content — atsell.io", containing the hook, carousel script, and single LinkedIn post — ready to copy-paste.
 
 **Vault:** RESEND_API_KEY stored in CMA vault, injected as environment variable at runtime.
 
