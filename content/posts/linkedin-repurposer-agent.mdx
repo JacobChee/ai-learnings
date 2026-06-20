@@ -68,6 +68,97 @@ Three files, emailed every Saturday:
 
 **gpt-design-prompt.md** — A complete prompt to paste into GPT Image. Includes our brand colors (navy #1e3a5f, gold #e8a838), font guidance (Playfair Display headings), and the specific slide content to render.
 
+## Sample output
+
+Here's what landed in the inbox last Saturday, pulled from the atsell.io blog post on catalogue strategy.
+
+### Hook
+
+<Hook>
+Most Shopee sellers think adding more SKUs = more revenue.
+
+The brands that actually scale do the opposite.
+
+Here's what 200+ brands taught us about catalogue strategy 👇
+</Hook>
+
+### Carousel script
+
+<Slide number={1} label="Hook slide — stop the scroll">
+**Your bestseller might be killing your store.**
+
+Most brands optimise for range. The ones that scale optimise for depth.
+</Slide>
+
+<Slide number={2} label="The counterintuitive truth">
+Adding SKUs feels like growth. It's actually ops debt.
+
+Every new product = more listings to manage, more stock to hold, more customer service queries, more ad spend spread thin.
+</Slide>
+
+<Slide number={3} label="The data">
+Stores with under 20 SKUs convert 3× better than stores with 100+.
+
+Not because they have less. Because every SKU earns its place.
+</Slide>
+
+<Slide number={4} label="Why more SKUs breaks everything">
+Traffic gets split across too many listings. Reviews never concentrate. Shopee's algorithm doesn't know what you're about. You end up competing with yourself.
+</Slide>
+
+<Slide number={5} label="What depth actually looks like">
+Pick your top 3 SKUs by revenue. Put all 5-star reviews on those 3. All ad spend on those 3. All bundles built around those 3. Everything else is on life support or cut.
+</Slide>
+
+<Slide number={6} label="The 80/20 of your catalogue">
+80% of your revenue comes from 20% of your SKUs.
+
+Most brands know this. Almost none act on it.
+
+The ones that do? They scale faster with less chaos.
+</Slide>
+
+<Slide number={7} label="CTA">
+**Audit your catalogue this week.**
+
+Pick your top 3. Double down. Cut the rest.
+
+If you want a framework for doing this across Shopee, Lazada and TikTok Shop — drop a comment and I'll share it.
+</Slide>
+
+### GPT image generation prompt
+
+<GPTPrompt>
+Create a 7-slide LinkedIn carousel with a clean, premium design.
+
+BRAND SYSTEM:
+- Background: Deep navy #1e3a5f
+- Accent colour: Gold #e8a838
+- Heading font: Playfair Display (serif), bold
+- Body font: DM Sans, regular
+- Logo: "atsell" wordmark bottom-right, small, white
+
+SLIDE SPECS (repeat layout for all 7):
+- 1080 × 1080px square format
+- Slide number top-left in gold, small
+- Headline centre-aligned, Playfair Display, white, large
+- Supporting text below headline, DM Sans, white/70%, smaller
+- Thin gold rule separating headline from body text
+- Clean white progress bar at bottom showing slide position
+
+SLIDE CONTENT:
+
+Slide 1 — "Your bestseller might be killing your store." / Sub: Most brands optimise for range. The ones that scale optimise for depth.
+Slide 2 — "Adding SKUs feels like growth." / Sub: It's actually ops debt.
+Slide 3 — "Stores with under 20 SKUs convert 3x better." / Sub: Not because they have less. Because every SKU earns its place.
+Slide 4 — "More SKUs breaks everything." / Sub: Traffic split · Reviews scattered · Algorithm confused · You compete with yourself
+Slide 5 — "Depth over breadth." / Sub: Top 3 SKUs. All reviews. All ad spend. All bundles. Everything else cut.
+Slide 6 — "80% of revenue. 20% of SKUs." / Sub: Most brands know this. Almost none act on it.
+Slide 7 — "Audit your catalogue this week." / Sub: Pick your top 3. Double down. Cut the rest.
+
+Style reference: minimal, editorial, high contrast navy-on-gold. No gradients. No stock photos. Text-first design.
+</GPTPrompt>
+
 ## What it costs
 
 One run uses roughly 15,000–20,000 tokens (Opus 4.8). At current pricing, each Saturday run costs under $0.50.
