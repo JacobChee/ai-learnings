@@ -62,7 +62,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
                         className={`block w-3 h-3 rounded-full ${i < post.applicableScore! ? 'bg-gold' : 'bg-white/15'}`}
                       />
                     ))}
-                    <span className="ml-2 text-sm font-semibold text-white">{post.applicableScore}/10</span>
+                    <span className="ml-2 text-sm font-semibold text-white">{post.applicableScore}/10 applicability</span>
                   </div>
                 </div>
               )}

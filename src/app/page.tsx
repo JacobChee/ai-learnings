@@ -73,7 +73,7 @@ export default function Home() {
                                   className={`block w-2.5 h-2.5 rounded-full ${i < post.applicableScore! ? 'bg-gold' : 'bg-border-card'}`}
                                 />
                               ))}
-                              <span className="ml-1.5 text-xs font-semibold text-navy">{post.applicableScore}/10</span>
+                              <span className="ml-1.5 text-xs font-semibold text-navy">{post.applicableScore}/10 applicability</span>
                             </div>
                           </div>
                         )}
