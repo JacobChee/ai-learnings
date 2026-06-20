@@ -62,21 +62,31 @@ export default function Home() {
                       {post.description}
                     </p>
                     {(post.applicableScore !== undefined || post.learningCurve) && (
-                      <div className="mt-4 pt-4 border-t border-border-card flex items-center gap-3 flex-wrap">
+                      <div className="mt-4 pt-4 border-t border-border-card flex items-center justify-between gap-4">
                         {post.applicableScore !== undefined && (
-                          <div className="flex flex-col gap-0.5">
-                            <span className="text-[10px] uppercase tracking-wider text-body-gray/60">Physio & Sole / Anjou</span>
-                            <span className="text-xs font-semibold text-navy">{post.applicableScore}/10 applicable</span>
+                          <div className="flex flex-col gap-1.5">
+                            <span className="text-[10px] uppercase tracking-wider text-body-gray/60">Physio and Sole Clinic / Anjouhealth</span>
+                            <div className="flex items-center gap-1">
+                              {Array.from({ length: 10 }, (_, i) => (
+                                <span
+                                  key={i}
+                                  className={`block w-2.5 h-2.5 rounded-full ${i < post.applicableScore! ? 'bg-gold' : 'bg-border-card'}`}
+                                />
+                              ))}
+                              <span className="ml-1.5 text-xs font-semibold text-navy">{post.applicableScore}/10</span>
+                            </div>
                           </div>
                         )}
                         {post.learningCurve && (
-                          <div className="flex flex-col gap-0.5 ml-auto text-right">
+                          <div className="flex flex-col items-end gap-1.5">
                             <span className="text-[10px] uppercase tracking-wider text-body-gray/60">Learning curve</span>
-                            <span className={`text-xs font-semibold ${
-                              post.learningCurve === 'Easy' ? 'text-emerald-500' :
-                              post.learningCurve === 'Moderate' ? 'text-amber-500' :
-                              'text-red-500'
-                            }`}>{post.learningCurve}</span>
+                            <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${
+                              post.learningCurve === 'Easy' ? 'bg-emerald-50 text-emerald-600' :
+                              post.learningCurve === 'Moderate' ? 'bg-amber-50 text-amber-600' :
+                              'bg-red-50 text-red-600'
+                            }`}>
+                              {post.learningCurve === 'Easy' ? '▁▃▅' : post.learningCurve === 'Moderate' ? '▁▃█' : '▁██'} {post.learningCurve}
+                            </span>
                           </div>
                         )}
                       </div>

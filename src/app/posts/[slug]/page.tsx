@@ -51,21 +51,31 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
             {post.readTime && <span>· {post.readTime}</span>}
           </div>
           {(post.applicableScore !== undefined || post.learningCurve) && (
-            <div className="flex items-center gap-6 mt-5 pt-5 border-t border-white/10">
+            <div className="flex flex-wrap items-start gap-8 mt-5 pt-5 border-t border-white/10">
               {post.applicableScore !== undefined && (
-                <div>
-                  <p className="text-[10px] uppercase tracking-widest text-white/30 mb-1">Physio & Sole / Anjou Health</p>
-                  <p className="text-sm font-semibold text-white">{post.applicableScore}/10 applicable</p>
+                <div className="flex flex-col gap-1.5">
+                  <p className="text-[10px] uppercase tracking-widest text-white/30">Physio and Sole Clinic / Anjouhealth</p>
+                  <div className="flex items-center gap-1">
+                    {Array.from({ length: 10 }, (_, i) => (
+                      <span
+                        key={i}
+                        className={`block w-3 h-3 rounded-full ${i < post.applicableScore! ? 'bg-gold' : 'bg-white/15'}`}
+                      />
+                    ))}
+                    <span className="ml-2 text-sm font-semibold text-white">{post.applicableScore}/10</span>
+                  </div>
                 </div>
               )}
               {post.learningCurve && (
-                <div>
-                  <p className="text-[10px] uppercase tracking-widest text-white/30 mb-1">Learning curve</p>
-                  <p className={`text-sm font-semibold ${
-                    post.learningCurve === 'Easy' ? 'text-emerald-400' :
-                    post.learningCurve === 'Moderate' ? 'text-amber-400' :
-                    'text-red-400'
-                  }`}>{post.learningCurve}</p>
+                <div className="flex flex-col gap-1.5">
+                  <p className="text-[10px] uppercase tracking-widest text-white/30">Learning curve</p>
+                  <span className={`self-start text-xs font-semibold px-3 py-1 rounded-full ${
+                    post.learningCurve === 'Easy' ? 'bg-emerald-500/20 text-emerald-300' :
+                    post.learningCurve === 'Moderate' ? 'bg-amber-500/20 text-amber-300' :
+                    'bg-red-500/20 text-red-300'
+                  }`}>
+                    {post.learningCurve === 'Easy' ? '▁▃▅' : post.learningCurve === 'Moderate' ? '▁▃█' : '▁██'} {post.learningCurve}
+                  </span>
                 </div>
               )}
             </div>
