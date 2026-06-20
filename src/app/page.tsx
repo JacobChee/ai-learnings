@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { getAllPosts } from '@/lib/posts'
 
 export default function Home() {
@@ -7,15 +8,24 @@ export default function Home() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-offwhite py-24 px-6 border-b border-border-card">
-        <div className="max-w-6xl mx-auto">
-          <span className="inline-block text-xs font-medium uppercase tracking-widest text-gold border border-gold/40 bg-gold/10 px-3 py-1 rounded-full mb-6">
+      <section className="relative overflow-hidden" style={{ minHeight: 420 }}>
+        <Image
+          src="https://images.unsplash.com/photo-1758691030817-a6271a533c42?w=1400&q=80"
+          alt="Senior man smiling while using a tablet"
+          fill
+          className="object-cover object-center"
+          priority
+        />
+        {/* overlay */}
+        <div className="absolute inset-0 bg-black/55" />
+        <div className="relative z-10 max-w-6xl mx-auto px-6 py-28">
+          <span className="inline-block text-xs font-medium uppercase tracking-widest text-gold border border-gold/50 bg-black/30 px-3 py-1 rounded-full mb-6">
             Jacob&apos;s AI Learnings
           </span>
-          <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl text-navy leading-tight max-w-2xl">
+          <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl text-white leading-tight max-w-2xl">
             AI for Boomers
           </h1>
-          <p className="mt-6 text-lg text-body-gray max-w-xl font-sans leading-relaxed">
+          <p className="mt-6 text-lg text-white/70 max-w-xl font-sans leading-relaxed">
             Honest notes on what actually works — shared so the team doesn&apos;t have to start from scratch.
           </p>
         </div>
