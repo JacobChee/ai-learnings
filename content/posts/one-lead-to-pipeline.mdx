@@ -1,0 +1,80 @@
+---
+title: "I gave the AI one good lead and asked who else looks like it"
+date: "2026-06-21"
+description: "We had one inbound EHS lead at Becton Dickinson. Instead of asking the AI to 'find us customers', I fed it that single lead as the spec and asked who else looks identical. Out came a 28-company pipeline with named EHS managers and two tailored pitches — in one afternoon session."
+category: "Agents"
+readTime: "6 min read"
+applicableScore: 8
+learningCurve: "Easy"
+sourceLink: ""
+skillLink: ""
+resultImages:
+  - "/results/one-lead-to-pipeline/prospect-sheet.png"
+  - "/results/one-lead-to-pipeline/linkedin-search.png"
+  - "/results/one-lead-to-pipeline/pitch-gsk.png"
+---
+
+## The problem
+
+We had one good lead, and it came inbound. An EHS manager at Becton Dickinson — a global medtech manufacturer with a large plant in Tuas — reached out, interested in our ergonomic risk-assessment programme. His head office had told him to establish a baseline. Perfect fit for what AnjouHealth does, and we didn't have to chase it.
+
+One lead is not a pipeline. The obvious next question — "who else in Singapore looks exactly like this?" — is a week of someone googling competitors, digging through LinkedIn, and guessing at email addresses. Nobody had that week.
+
+## The move that worked: reverse the brief
+
+The instinct is to ask AI to "do market research" or "find us customers". That produces a generic list you could've gotten from a directory.
+
+I did the opposite. I gave it the **one lead as the specification** and asked it to reverse-engineer the profile: regulated manufacturer, real production lines with manual handling, a dedicated EHS function, and a head-office mandate driving the timing. Then: find every company in SEA/APAC that matches.
+
+That reframing is the whole trick. The lead already encodes what a good customer looks like. You don't need the AI to invent an ideal-customer profile — you need it to pattern-match against one you've already validated with money and interest.
+
+## What it built
+
+A tiered list of **28 companies** across four industries — medtech (Medtronic, Abbott, Thermo Fisher), pharma (GSK, Pfizer, Novartis, Amgen, Sanofi), semiconductor (Micron, GlobalFoundries, STMicroelectronics) and industrial/FMCG (P&G, 3M, ExxonMobil) — each scored A/B/C on how closely it matches the Becton Dickinson template, with the specific Singapore/Malaysia sites, the ergonomic risk rationale, and the right job titles to target.
+
+It also grounded the "why now" with real numbers it pulled and checked: work-related musculoskeletal disorders are Singapore's leading occupational disease at roughly **60% of confirmed cases**, manufacturing is the top contributing sector, there were **353 confirmed WRMSD cases in 2023**, and MOM has been intensifying ergonomic inspections. That's the regulatory pressure that makes the head-office mandate urgent.
+
+![Prospect list spreadsheet](/results/one-lead-to-pipeline/prospect-sheet.png)
+
+## The part that actually unlocked it
+
+Here's the counter-intuitive bit. The market research wasn't the hard part — and the tool I expected to do the work didn't.
+
+Plain web search is US-region and surfaced **zero** named Singapore EHS managers. It's fine for "which pharma companies have Tuas plants", useless for "who runs safety at the Tuas plant".
+
+What worked was letting the agent drive **my own logged-in LinkedIn session** through the browser, one company at a time. That found real, named EHS owners: an EHS Manager at GSK, a Manager of EHS at Thermo Fisher's Pharma Services Group, an EHS Senior Engineer at Micron, two EHS Managers at STMicroelectronics. It even flagged that one of them was already a **first-degree connection of mine** — a warm intro hiding in plain sight.
+
+![LinkedIn people search, names redacted](/results/one-lead-to-pipeline/linkedin-search.png)
+
+## What didn't work (the honest limits)
+
+This is not a magic "send" button. Real tradeoffs:
+
+- **It finds names and email *patterns*, not verified addresses.** Six companies have publicly confirmed formats (Becton Dickinson, Medtronic, Abbott, Thermo Fisher, Micron, GSK — and our own lead's address confirmed the BD pattern). The rest are inferred `first.last@domain`. About half the contact list is tagged "confirm before sending". The agent was clear about which, instead of pretending.
+- **A free LinkedIn account throttles search.** I got clean results for about ten target companies before risking the limit, so the contact column has deliberate gaps. It's not all 28.
+- **Out-of-network profiles hide surnames.** The Abbott EHS manager showed as "Kelvin L." — enough to find, not enough to build an email without a confirming click.
+- **One company (Novartis) returned no clearly-labelled EHS person** on the first pass. The agent said so rather than inventing one — which I'd rather have.
+
+I told it explicitly: don't fabricate names, and don't scrape — browse what I can already see in my own session. That boundary is why I'm comfortable with the output.
+
+## The tailored pitch
+
+Once the targets and contacts existed, generating the actual pitch was the cheap part. It wrote per-company proposals — addressed to the named EHS manager, built around that company's specific operations (cleanroom and aseptic handling for GSK; high-throughput packaging and warehousing for Thermo Fisher), opening with the head-office-baseline trend our real lead represents, and mapping each risk to our RULA/REBA assessment.
+
+![Tailored GSK pitch, name redacted](/results/one-lead-to-pipeline/pitch-gsk.png)
+
+I asked it to do these **two at a time, highest email-confidence first**, and stop until I'd reviewed each pair. That pacing matters — it keeps me reading every doc before it's sent, instead of trusting a batch of 28.
+
+## What it cost
+
+**$0.** This ran in Cowork on **Claude Opus 4.8** (desktop, with file and browser tools), inside the subscription we already pay for — no metered API billing, no per-token charge for the session. The only real input was a couple of hours of an afternoon, most of it me reviewing the output.
+
+The comparison isn't "AI vs. a researcher". It's "this pipeline exists vs. it never gets built because nobody had the week".
+
+## What I'd do next
+
+1. **Verify the inferred emails before any send** — start with the Tier A targets, confirm each surname and address via the profile or a verification tool.
+2. **Close Becton Dickinson first**, then ask permission to use it as a named reference — the social proof is what makes the cold outreach to its look-alikes warm.
+3. **Run the remaining LinkedIn lookups** (Stryker, J&J MedTech, Amgen, Roche, the EMS players) to fill the contact gaps left by the free-account throttle.
+4. **Use the first-degree connections as intros** instead of cold-emailing — one of them already sits inside the target set.
+5. **Keep generating the pitches two at a time**, highest confidence first, reviewing each before it leaves my outbox.
