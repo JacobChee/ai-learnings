@@ -1,0 +1,178 @@
+---
+title: "I turned one product photo into UGC video ads — about S$12, 20 minutes, no creator booked"
+date: "2026-06-24"
+description: "I fed a single product photo to a Higgsfield agent and got believable UGC video ads — modeled on viral formats already winning in the category. The realism wasn't the hard part. Consistency was. An honest writeup, including why it scores a 2 for a physio clinic."
+category: "Tools"
+readTime: "5 min read"
+applicableScore: 2
+learningCurve: "Easy"
+sourceLink: ""
+skillLink: "/higgsfield-content-factory"
+resultImages:
+  - "/results/two-ugc-ads-in-twenty-minutes/video-1-comfiest-pants-test.png"
+  - "/results/two-ugc-ads-in-twenty-minutes/video-2-features-walkthrough.png"
+  - "/results/two-ugc-ads-in-twenty-minutes/gf-ordered-another-pair.png"
+---
+
+## The problem
+
+A friend sells men's cotton pyjama pants on a Singapore marketplace. Seven plaid
+designs, decent margins, and exactly one piece of creative: a flat product listing
+image. No video, no budget for a creator, no time to shoot.
+
+The conventional move is to brief a UGC creator (S$200–500 a clip here), wait a week,
+and hope they read the brief. I wanted to know if an AI pipeline could skip all of that
+and produce something you'd actually let run as an ad.
+
+## What I actually did
+
+I ran a Higgsfield "content factory" agent. The whole thing is button-driven — no
+prompt engineering on my side. The flow:
+
+1. Upload the single product photo.
+2. The agent registers it as a "product" and reads the design off the image.
+3. Pick a format and a creator (a preset avatar), and it writes the full shot script
+   itself.
+4. It renders a 9:16, 1080p clip with synced audio and a talking voiceover.
+
+I rendered two clips:
+
+- **A "comfiest-pants test"** — a guy attempts a backflip, fails, lands on the bed, and
+  deadpans straight into a cotton-and-waistband review. 12 seconds.
+- **An honest features walkthrough** — different guy, the camera "bumps" his forehead,
+  he recovers and walks through the drawstring, the soft cotton, the straight-leg cut.
+  15 seconds.
+
+Both are bedroom-set, handheld, and — this is the part that got me — genuinely pass as
+real phone footage.
+
+<div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', margin: '8px 0' }}>
+  <video controls preload="metadata" width="230" style={{ borderRadius: '12px' }} poster="/results/two-ugc-ads-in-twenty-minutes/video-1-comfiest-pants-test.png">
+    <source src="/results/two-ugc-ads-in-twenty-minutes/video-1-comfiest-pants-test.mp4" type="video/mp4" />
+  </video>
+  <video controls preload="metadata" width="230" style={{ borderRadius: '12px' }} poster="/results/two-ugc-ads-in-twenty-minutes/video-2-features-walkthrough.png">
+    <source src="/results/two-ugc-ads-in-twenty-minutes/video-2-features-walkthrough.mp4" type="video/mp4" />
+  </video>
+</div>
+
+## Where the creative comes from
+
+This is the part I almost undersold. The agent doesn't invent random skits. It works from
+a library of UGC formats that are **already winning in the product's category** — short
+challenge clips, sidewalk-style stranger interviews, premium unboxings, honest talking-
+head reviews, audio-first ASMR close-ups. These aren't generic; they're the shapes that
+actually trend for loungewear and cheap-comfort apparel right now. The system's job is to
+map *your* product into a proven format, not to guess at one.
+
+My two clips are the two highest-fit formats for this product: a comfort "challenge" and
+an honest review. So the creative direction isn't coming from me having a good idea at
+11pm — it's coming from formats that are demonstrably pulling views in this exact
+category.
+
+One honest caveat: I jumped straight to the build step this run, so I leaned on that
+format library rather than kicking off a fresh live trend-scrape across TikTok/Reels/
+Shorts first. The full pipeline does that research pass up front; I skipped it because the
+category formats here are well-established and I wanted output fast.
+
+## The third clip nearly sold me
+
+The seller then generated one more — a female creator in one plaid, holding up another
+pair: a *"my girlfriend just ordered another colour"* social-proof beat. Different proven
+format (social proof / haul), same flow, same product photo. It's the most convincing of
+the three, and it's the one I'd never have thought to script.
+
+<div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', margin: '8px 0' }}>
+  <video controls preload="metadata" width="230" style={{ borderRadius: '12px' }} poster="/results/two-ugc-ads-in-twenty-minutes/gf-ordered-another-pair.png">
+    <source src="/results/two-ugc-ads-in-twenty-minutes/gf-ordered-another-pair.mp4" type="video/mp4" />
+  </video>
+</div>
+
+## The counter-intuitive bit
+
+I assumed the believability would come from image quality. It didn't. It came from the
+**format choice plus the engineered mistakes**.
+
+The two hooks I picked are canned templates: *Epic Fail* (botched backflip) and
+*Camera Bump* (operator clips the subject's head). They're deliberately clumsy. And that
+clumsiness — baked into formats that already go viral — is what makes the clip read as a
+real person filming themselves rather than an ad. A clean, polished render looks like an
+ad and gets scrolled past. The flaw is the format, and the format is the point.
+
+So the lever isn't "make it look more real." It's "pick a viral format and let it look
+like an accident."
+
+## What didn't work
+
+Honest tradeoffs, not self-inflicted ones:
+
+- **Faces drift unless you pin them.** If you don't lock a specific preset avatar, the
+  model casts a fresh random face on every render. Across a campaign that's death — your
+  "creator" changes identity clip to clip. You have to explicitly pin an avatar.
+- **It invented a hangtag.** The first render put a paper swing-tag on the front of the
+  pants — because the source photo was a retail listing shot. I had to explicitly say
+  *no hangtag, no swing tag, clean fabric only* in the negative prompt to remove it. The
+  model copies what's in your reference image a little too faithfully.
+- **One reshoot, straight away.** My first take cast a creator I didn't want. Re-rendering
+  is cheap but not free — an extra 120 credits, costed below.
+- **The 15-second ceiling is real.** Every clip is capped at 4–15s. Anything longer has to
+  be designed as two clips and stitched outside the tool.
+- **Getting the files out takes a manual step.** The finished videos live on a CDN my
+  tooling couldn't reach, so pulling the mp4s (and stills) meant grabbing them from the
+  player by hand.
+
+## What it cost
+
+Real numbers, this session, on a Higgsfield **Ultra** plan ($99/mo billed annually for
+3,000 credits ≈ **$0.033/credit, ~S$0.045**):
+
+| Render | Length | Credits | ≈ USD | ≈ SGD |
+|---|---|---|---|---|
+| Comfiest-pants test | 12s | 120 | $3.96 | S$5.35 |
+| Features walkthrough | 15s | 150 | $4.95 | S$6.68 |
+| Discarded reshoot (recast) | 12s | 120 | $3.96 | S$5.35 |
+| **Two delivered clips** | | **270** | **~$8.90** | **~S$12** |
+| **What I actually spent** | | **390** | **~$12.90** | **~S$17.40** |
+
+A clip lands in the 120–150 credit band (~$4–5 / ~S$5.40–6.70), length-dependent — so the
+girlfriend clip is another ~$4 on top. For context: one human UGC creator in Singapore is
+S$200–500 per clip, with a multi-day turnaround. This was three usable clips in about 20
+minutes of mostly waiting.
+
+## The reusable part
+
+There's no clever script — the agent writes the prompt itself. The one thing worth
+keeping is the generation call shape, because the two non-obvious fields (`mode` and a
+pinned `avatar`) are what keep a campaign consistent:
+
+```json
+{
+  "model": "marketing_studio_video",
+  "mode": "Product Review",
+  "product_ids": ["<your-registered-product>"],
+  "hook_id": "<camera-bump-template>",
+  "setting_id": "<bedroom>",
+  "avatars": [{ "id": "<pinned-preset-avatar>", "type": "preset" }],
+  "generate_audio": true,
+  "aspect_ratio": "9:16",
+  "resolution": "1080p",
+  "duration": 15,
+  "prompt": "... scene ... Negative: no hangtag, no swing tag, no on-screen text, clean image only."
+}
+```
+
+The full button-driven version is the `/higgsfield-content-factory` skill.
+
+## Does this matter for Physio and Sole Clinic?
+
+Honestly — not much, which is why I scored it a 2.
+
+This pipeline is built around a *product photo*. You upload a thing, it animates a person
+using that thing. A physio clinic doesn't have a product to anchor it; we sell an
+assessment, a pair of hands, an outcome. The tool has no obvious hook for "watch someone
+get treated."
+
+Where it *could* earn its keep: the small retail side — insoles, orthotic sandals, braces,
+any physical SKU we actually sell. For those, this is a fast, cheap way to get scroll-
+stopping social creative, in formats already proven in-category, without booking a shoot.
+For the core clinical service, it's the wrong tool — and worth saying so plainly rather
+than forcing it.
