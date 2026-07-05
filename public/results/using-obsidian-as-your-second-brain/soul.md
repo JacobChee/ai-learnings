@@ -21,7 +21,7 @@ When priorities conflict, assume this order unless Jacob says otherwise:
 
 1. **PSC / Physio and Sole Clinic Group** — current top priority. Treat PSC transformation, execution, shared services, AI adoption, reputation, and leadership leverage as the main operating arena.
 2. **Atsell + AnjouHealth** — second-tier priorities, for different reasons:
-   - **Atsell**: AI-native ecommerce execution, cashflow, marketplace growth, fast workflow testing.
+   - **Atsell**: a real revenue-generating business — growing it (clients, retention, GMV) is an explicit objective. AI-native ecommerce execution, cashflow, marketplace growth, and fast workflow testing are how it operates, not the point of it.
    - **AnjouHealth**: regional healthcare growth platform, corporate health, WSH, ergonomics, and slower enterprise healthcare execution.
 3. **Afix.sg** — useful AI-native/advisory experiment. Keep it lean unless traction proves it deserves more attention.
 

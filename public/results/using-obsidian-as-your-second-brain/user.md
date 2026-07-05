@@ -4,12 +4,14 @@
 I operate across four entities at once, split roughly into two AI-native ventures and two larger, slower-moving healthcare businesses:
 
 - **Physio and Sole Clinic Group / PSC** — my current top priority and full-time role. I'm the General Manager, overseeing the shared services HQ team. This is the largest physio and podiatry chain in Singapore. My role is evolving toward Head of Agentic Transformation. This org is larger, more established, and slower to change, so AI adoption must be translated carefully into operational systems that can survive real-world clinical, people, and reputation constraints.
-- **Atsell** — I'm the founder. An ecommerce enabler that helps brands manage marketplace stores such as Lazada, Shopee, and TikTok Shop. Day-to-day is run by a remote team based in Vietnam. Atsell is an AI-native ecommerce execution and cashflow platform, and one of my main fast-testing environments.
+- **Atsell** — I'm the founder. An ecommerce enabler that helps brands manage marketplace stores such as Lazada, Shopee, and TikTok Shop. Day-to-day is run by a remote team based in Vietnam. Atsell is a real revenue-generating business, not just an AI experimentation ground — growing it (new clients, retained clients, revenue) is an explicit objective in its own right. It's also one of my main fast-testing environments for AI, but that's in service of growing the business, not a substitute for it.
 - **AnjouHealth** — shareholder/director context and regional healthcare growth platform. Receptive to AI, but slower-moving because of healthcare, geography, and stakeholder complexity.
 - **Afix.sg** — I'm an advisor. AI-native and useful as a lightweight services/advisory experiment, but it should stay lean unless traction proves it deserves more attention. Local repo at `C:\Users\Jacob\afix` — GitHub: https://github.com/JacobChee/afix.
 
 ## The core throughline
 My real strategic project right now: Atsell and Afix are where I test and validate what actually works with AI. PSC and AnjouHealth are where those learnings eventually need to land — but they move slower, need more translation, and can't just copy what worked in a scrappy ecommerce/AI-native context wholesale. Anything the AI helps me think through should assume this pattern: prototype fast in the AI-native ventures, then adapt (not copy-paste) into the larger, more conservative ones.
+
+Important nuance on Atsell specifically: it's not just the AI testbed — it's a real business that generates revenue, and growing it (clients, retention, GMV under management) is a genuine objective, not a side effect of experimentation. Don't treat Atsell work as "just testing" when it's actually a client deliverable, a pricing decision, or a revenue-driving move.
 
 ## Strategic priority stack
 My current priority stack is:
@@ -21,7 +23,7 @@ My current priority stack is:
 This means PSC is the current main operating priority. Treat PSC transformation, shared services execution, AI adoption, leadership leverage, and reputation management as the primary arena.
 
 Atsell and AnjouHealth are both important, but they serve different roles:
-- **Atsell** is the fast AI-native ecommerce execution and cashflow platform.
+- **Atsell** is a real revenue-generating business first — the fast AI-native ecommerce execution and cashflow platform is how it operates, not what it's for. Growing Atsell (clients, revenue, retention) is an explicit objective.
 - **AnjouHealth** is the regional healthcare growth platform with slower stakeholder and enterprise dynamics.
 
 Afix.sg is useful as an AI-native/advisory experiment, but it should stay lean unless clear traction proves it deserves more attention.
