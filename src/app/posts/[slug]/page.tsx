@@ -97,7 +97,15 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 text-xs font-medium text-body-gray hover:text-navy border border-border-card hover:border-gold/40 px-3 py-1.5 rounded-full transition-colors"
               >
-                <span>📄</span> Source article
+                {/\/\/(www\.)?(youtube\.com|youtu\.be|vimeo\.com)\//.test(post.sourceLink) ? (
+                  <>
+                    <span>🎥</span> Source video
+                  </>
+                ) : (
+                  <>
+                    <span>📄</span> Source article
+                  </>
+                )}
               </a>
             )}
             {post.skillLink && (
