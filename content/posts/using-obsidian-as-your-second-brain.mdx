@@ -1,0 +1,84 @@
+---
+title: "Using Obsidian as Claude Code's second brain, across four businesses"
+date: "2026-07-05"
+description: "Claude Code forgets everything the second you close a project folder. Here's how I wired it into my existing Obsidian vault so it reads standing context before answering, and proposes notes back instead of losing what it learns."
+category: "Agents"
+readTime: "5 min read"
+applicableScore: 4
+learningCurve: "Moderate"
+sourceLink: "https://www.youtube.com/watch?v=b4d32pBa3UY"
+---
+
+## The problem
+
+I run four businesses at once — Atsell, Afix.sg, Physio and Sole Clinic Group, Anjouhealth. I've been keeping an Obsidian vault for a while now: one note per person, per company, per decision, per project. It's genuinely useful — the kind of thing where you open a note before a call and remember exactly where you left off instead of re-explaining your own business to yourself.
+
+Claude Code had zero access to any of it.
+
+Every time I opened a coding session — in the Atsell repo, the Afix repo, wherever — it started from nothing. It didn't know who Ying Feng was, that Enso Lifestyle had three overdue invoices, or that Physio and Sole's roster project already had a live prototype. And anything useful that came up *during* a coding session — a decision, a new contact, a project milestone — just evaporated when the session ended. Two systems, no bridge.
+
+## What I built
+
+One file: a global `~/.claude/CLAUDE.md`. Claude Code loads this automatically in *every* session, regardless of which project folder you're sitting in — so it doesn't matter if I'm coding in the Atsell repo or the Afix repo, the vault is always in scope.
+
+```markdown
+# Jacobee vault
+
+Jacob keeps a personal/business knowledge vault (Obsidian) at:
+`C:\Users\Jacob\Desktop\Jacobee`
+
+It holds standing context across his four entities (Atsell, Afix.sg,
+Physio and Sole Clinic Group, Anjouhealth) in these folders: `People/`,
+`Companies/`, `Projects/`, `Decisions/`, `Meetings/`, `Knowledge/`,
+`MOC/`, `Daily/`. Each folder has an `_Index.md` with the note template
+for that folder — follow it exactly when creating a new note there.
+
+## Reading from the vault
+
+Before answering anything that involves a specific person, company,
+project, or past decision, check whether a note already exists in the
+vault and use it instead of asking Jacob to re-explain something
+already logged. If nothing relevant exists, say so rather than guessing.
+
+This applies in every project, not just when the working directory is
+the vault itself.
+
+## Writing back to the vault
+
+If something vault-worthy comes up while working in *any* project — a
+new person or company mentioned, a project milestone, a decision with
+real tradeoffs, a reusable insight — propose the note (which folder,
+filename, and content, matching that folder's template) and ask Jacob
+before writing it. Don't write to the vault silently.
+```
+
+Two behaviors fall out of this:
+
+1. **Reads before it answers.** If I ask something touching a person, company, or past decision, it greps the vault first instead of guessing or making me re-explain.
+2. **Proposes before it writes.** It doesn't silently dump files into my vault. It drafts the note, shows me the content, and waits for a yes.
+
+That second part mattered more than I expected. The first time I tried this, my instinct was to let it write automatically — faster. But a vault is only useful if you trust what's in it. One bad auto-generated note and I'd stop trusting all of them.
+
+## Backfilling from sessions that already happened
+
+The harder question: what about all the coding sessions from *before* this existed? I had 11 past Claude Code sessions sitting in Downloads and G Drive — did any of them contain vault-worthy stuff that never made it in?
+
+Turned out Claude Code already keeps its own lightweight per-project memory (separate system, separate from the vault). Two of those memory files were short but solid — the local repo paths for the Atsell and Afix websites. One was a goldmine: a fully detailed writeup of a receptionist rostering web app already built and deployed for Physio and Sole Clinic (shift drag-and-drop, Singapore MOM labour-law compliance checks, a live Vercel deployment, the works) — all sitting in a memory file, never logged anywhere I'd actually see it day to day.
+
+I asked Claude Code to pull all of that into the vault: two company notes got a one-line repo reference added, and the rostering project got a full [[Projects]] note with status log, decisions, and open gaps.
+
+## What worked, what didn't
+
+**Worked:** the existing per-project memory files. They were already distilled and specific, so turning them into vault notes was just reformatting, not re-deriving.
+
+**Didn't:** trying to go further back than that. There's a session-transcript search tool, but it only returns one snippet per session — not the full conversation. Three older sessions (an insurance renewal reminder, some Singapore property research, an Atsell content strategy pass) only turned up fragments. Not enough to write a note I'd actually trust. Rather than fabricate detail to fill the gaps, I skipped them and flagged it — if I want those captured properly, the honest path is a two-line manual recap, not a guess dressed up as a memory.
+
+## The cost
+
+This isn't an API-metered thing — no model calls beyond the conversation itself, no ongoing spend. It's a config file plus some file reads/writes. The only "cost" is upfront: writing the CLAUDE.md, and getting the vault's own folder templates right so new notes match what's already there.
+
+## What's next
+
+1. Give the three skipped sessions (insurance, property research, content strategy) a real recap and log them properly instead of leaving them out.
+2. Let this run for real during actual coding work in the Atsell/Afix repos and see how often the "propose a note" behavior actually fires — theory versus practice.
+3. Borrow from the vault's own existing "Nightly Log" habit (a manual end-of-day consolidation note) and see if a periodic pass catching anything Claude Code missed is worth automating.
