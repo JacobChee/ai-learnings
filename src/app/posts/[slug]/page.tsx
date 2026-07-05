@@ -90,24 +90,29 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         {/* Links strip */}
         {(post.skillLink || post.sourceLink) && (
           <div className="bg-white rounded-[14px] border border-border-card px-4 py-3 mb-5 flex flex-wrap gap-2">
-            {post.sourceLink && (
-              <a
-                href={post.sourceLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-xs font-medium text-body-gray hover:text-navy border border-border-card hover:border-gold/40 px-3 py-1.5 rounded-full transition-colors"
-              >
-                {/\/\/(www\.)?(youtube\.com|youtu\.be|vimeo\.com)\//.test(post.sourceLink) ? (
-                  <>
-                    <span>🎥</span> Source video
-                  </>
-                ) : (
-                  <>
-                    <span>📄</span> Source article
-                  </>
-                )}
-              </a>
-            )}
+            {post.sourceLink &&
+              (Array.isArray(post.sourceLink) ? post.sourceLink : [post.sourceLink]).map((link, i) => {
+                const isVideo = /\/\/(www\.)?(youtube\.com|youtu\.be|vimeo\.com)\//.test(link)
+                return (
+                  <a
+                    key={link}
+                    href={link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 text-xs font-medium text-body-gray hover:text-navy border border-border-card hover:border-gold/40 px-3 py-1.5 rounded-full transition-colors"
+                  >
+                    {isVideo ? (
+                      <>
+                        <span>🎥</span> Source video{i > 0 ? ` ${i + 1}` : ''}
+                      </>
+                    ) : (
+                      <>
+                        <span>📄</span> Source article{i > 0 ? ` ${i + 1}` : ''}
+                      </>
+                    )}
+                  </a>
+                )
+              })}
             {post.skillLink && (
               <a
                 href={post.skillLink}

@@ -14,7 +14,7 @@ export interface PostMeta {
   applicableScore?: number
   learningCurve?: 'Easy' | 'Moderate' | 'Steep'
   skillLink?: string
-  sourceLink?: string
+  sourceLink?: string | string[]
   resultImages?: string[]
 }
 
