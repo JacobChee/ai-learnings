@@ -3,7 +3,7 @@ title: "Using Obsidian as Claude Code's second brain, across four businesses"
 date: "2026-07-05"
 description: "Claude Code forgets everything the second you close a project folder. Here's how I wired it into my existing Obsidian vault so it reads standing context before answering, and proposes notes back instead of losing what it learns."
 category: "Agents"
-readTime: "5 min read"
+readTime: "6 min read"
 applicableScore: 4
 learningCurve: "Moderate"
 sourceLink: "https://www.youtube.com/watch?v=b4d32pBa3UY"
@@ -18,6 +18,16 @@ My projects include Atsell, Afix.sg, Physio and Sole Clinic Group, and Anjouheal
 Claude Code had zero access to any of it.
 
 Every time I opened a coding session — in the Atsell repo, the Afix repo, wherever — it started from nothing. It didn't know who Ying Feng was, that Enso Lifestyle had three overdue invoices, or that Physio and Sole's roster project already had a live prototype. And anything useful that came up *during* a coding session — a decision, a new contact, a project milestone — just evaporated when the session ended. Two systems, no bridge.
+
+## Three files before any of the folders
+
+The video's idea wasn't just "make folders for notes" — it was to give the AI an actual identity, sitting as three files at the vault root, before People/Companies/Projects even come into it:
+
+- **identity.md** — who the AI is. I named mine "Jacobee" and gave it a role: part strategic advisor, part chief of staff, part coach, part technical collaborator, plus specifically a cross-entity translator that understands my projects move at different speeds.
+- **soul.md** — how it acts. Voice and hard rules — no hedge words, and specifically no sycophancy: don't present an opinion as settled fact and then fold the instant it's challenged. Defend the position if the reasoning still holds; update it if it doesn't.
+- **user.md** — who I am, written for the AI's benefit. How I run several things at once at different speeds, how I want problems presented to me (recommendation first, reasoning after), and what I can't stand (an AI stating a take as if it were fact).
+
+Those three files are what make the vault more than a filing cabinet — they're the reason the CLAUDE.md below tells Claude Code to read them at the start of a session, not just grep the folders for facts.
 
 ## What I built
 
