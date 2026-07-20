@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { MDXRemote } from 'next-mdx-remote/rsc'
+import remarkGfm from 'remark-gfm'
 import { getPost, getAllPosts } from '@/lib/posts'
 import { Slide, Hook } from '@/components/mdx'
 
@@ -150,7 +151,11 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
 
         <article className="bg-white rounded-[14px] border border-border-card p-5 sm:p-8">
           <div className="prose prose-sm max-w-none prose-headings:font-serif prose-headings:text-navy prose-a:text-gold prose-a:no-underline hover:prose-a:underline prose-strong:text-navy-dark prose-code:text-navy prose-code:bg-offwhite prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-xs prose-blockquote:border-l-gold prose-blockquote:text-body-gray">
-            <MDXRemote source={post.content} components={{ Slide, Hook }} />
+            <MDXRemote
+              source={post.content}
+              components={{ Slide, Hook }}
+              options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }}
+            />
           </div>
         </article>
 
