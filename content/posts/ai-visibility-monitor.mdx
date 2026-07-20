@@ -123,7 +123,7 @@ Build time was a few hours, most of it on the dashboard rather than the logic.
 
 Being straight about the gaps:
 
-- **Only OpenAI is actually running.** The code supports Claude, Gemini, and Perplexity — it queries any provider whose API key is present. But only `OPENAI_API_KEY` is set, so three of the four are dormant. Perplexity matters most here; it's search-native and closest to how people actually research vendors.
+- **Only OpenAI is actually running.** The code supports Claude, Gemini, and Perplexity — it queries any provider whose API key is present, with web search enabled on each. But only `OPENAI_API_KEY` is set, so three of the four are dormant. This is the biggest gap by far: two models from the same vendor already disagree about us by 10 points, so a score built on one provider is one company's opinion, not a market read.
 - **Citation share is measured and ignored.** Currently 8%, and unweighted. The most fixable gap.
 - **Position detection is regex, not semantic.** It splits on numbered lists, bullets, then paragraphs. A model that writes flowing prose instead of a list gets scored badly by a heuristic that expected a list.
 - **Sentiment is a keyword count.** It counts words like "leading" and "trusted" against "poor" and "unreliable". It has no idea about context or negation. Crude enough that I wouldn't act on it.
@@ -142,7 +142,12 @@ Patients are already asking AI these questions instead of Googling. Same four in
 
 ## What's next
 
-1. **Add the Perplexity API key.** Search-native, closest to real vendor research, and the biggest blind spot right now.
+1. **Turn on the other three models.** The code already queries any provider with a key present — all that's missing are the keys. Each one is a different audience, not a duplicate of ChatGPT:
+   - **Claude** — what a lot of people doing actual vendor research and procurement work in. Answers tend to be more cautious and better sourced, which usually means fewer names in the shortlist. Being one of them matters more.
+   - **Gemini** — closest proxy for what Google's AI Overviews will say, and default on most Android phones in Singapore and across SEA. Probably the widest consumer reach of the four.
+   - **Perplexity** — search-native, always cites sources, and the one where our 8% citation share gets tested hardest. If our pages aren't retrievable, this is where it shows.
+
+   Getting all four running matters more than any single one: right now we're reporting one company's opinion of us and calling it "AI visibility". The whole point of the per-model chart is to see where we're strong and where we're invisible — with one provider, that chart has nothing to compare.
 2. **Fold citation share into the score** — and rescore history from the raw CSV so the trend line stays honest.
 3. **Split the competitor list** into marketplaces vs actual enablers, and score competitors the same way we score ourselves.
 4. **Run each prompt three times per model and average it**, so the noise problem gets handled by the methodology instead of a caveat in a blog post.
