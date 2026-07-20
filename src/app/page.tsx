@@ -46,12 +46,19 @@ export default function Home() {
                   {/* Gold accent bar */}
                   <div className="h-1 bg-gradient-to-r from-gold to-gold-light" />
                   <div className="p-5 flex flex-col flex-1">
-                    <div className="flex items-center justify-between mb-3">
-                      <span className="text-[10px] font-medium uppercase tracking-wider text-gold bg-gold/10 border border-gold/20 px-2.5 py-1 rounded-full">
-                        {post.category}
-                      </span>
+                    <div className="flex items-start justify-between gap-2 mb-3">
+                      <div className="flex flex-wrap items-center gap-1.5">
+                        {post.categories.map(category => (
+                          <span
+                            key={category}
+                            className="text-[10px] font-medium uppercase tracking-wider text-gold bg-gold/10 border border-gold/20 px-2.5 py-1 rounded-full"
+                          >
+                            {category}
+                          </span>
+                        ))}
+                      </div>
                       {post.readTime && (
-                        <span className="text-[10px] text-body-gray">{post.readTime}</span>
+                        <span className="shrink-0 text-[10px] text-body-gray leading-6">{post.readTime}</span>
                       )}
                     </div>
                     <h2 className="font-serif text-base text-navy leading-snug mb-2 group-hover:text-gold transition-colors">

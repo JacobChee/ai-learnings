@@ -35,9 +35,16 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
           >
             ← All learnings
           </Link>
-          <span className="inline-block text-[10px] font-medium uppercase tracking-wider text-gold border border-gold/30 px-2.5 py-1 rounded-full mb-4">
-            {post.category}
-          </span>
+          <div className="flex flex-wrap items-center gap-1.5 mb-4">
+            {post.categories.map(category => (
+              <span
+                key={category}
+                className="inline-block text-[10px] font-medium uppercase tracking-wider text-gold border border-gold/30 px-2.5 py-1 rounded-full"
+              >
+                {category}
+              </span>
+            ))}
+          </div>
           <h1 className="font-serif text-xl sm:text-2xl text-white leading-tight mb-3">
             {post.title}
           </h1>

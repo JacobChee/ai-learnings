@@ -4,12 +4,27 @@ import matter from 'gray-matter'
 
 const postsDirectory = path.join(process.cwd(), 'content/posts')
 
+/**
+ * Frontmatter `category` accepts either a single string or a list.
+ * It is always normalised to an array here so the UI can render one pill per
+ * category without every call site re-checking the type.
+ */
+function toCategories(value: unknown): string[] {
+  if (Array.isArray(value)) {
+    const cleaned = value.map(v => String(v).trim()).filter(Boolean)
+    return cleaned.length > 0 ? cleaned : ['General']
+  }
+  if (typeof value === 'string' && value.trim()) return [value.trim()]
+  return ['General']
+}
+
 export interface PostMeta {
   slug: string
   title: string
   date: string
   description: string
-  category: string
+  /** Always at least one entry. First entry is the primary category. */
+  categories: string[]
   readTime?: string
   applicableScore?: number
   learningCurve?: 'Easy' | 'Moderate' | 'Steep'
@@ -37,7 +52,7 @@ export function getAllPosts(): PostMeta[] {
       title: data.title ?? '',
       date: data.date ?? '',
       description: data.description ?? '',
-      category: data.category ?? 'General',
+      categories: toCategories(data.category),
       readTime: data.readTime,
       applicableScore: data.applicableScore,
       learningCurve: data.learningCurve,
@@ -62,7 +77,7 @@ export function getPost(slug: string): Post | null {
     title: data.title ?? '',
     date: data.date ?? '',
     description: data.description ?? '',
-    category: data.category ?? 'General',
+    categories: toCategories(data.category),
     readTime: data.readTime,
     applicableScore: data.applicableScore,
     learningCurve: data.learningCurve,

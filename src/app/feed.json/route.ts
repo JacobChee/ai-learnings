@@ -10,7 +10,10 @@ export function GET() {
     title: p.title,
     date: p.date,
     description: p.description,
-    category: p.category,
+    // `category` is kept as the primary category string so existing feed
+    // consumers keep working; `categories` carries the full list.
+    category: p.categories[0],
+    categories: p.categories,
     readTime: p.readTime ?? null,
     url: `/posts/${p.slug}`,
   }))
