@@ -1,0 +1,147 @@
+---
+title: "We measure whether ChatGPT recommends us. The number moves 15 points on its own."
+date: "2026-07-21"
+description: "A daily script asks 12 buying questions across multiple AI models and scores how often Atsell shows up. Here's the methodology, what each part of the score means, and why a single run's number is close to meaningless."
+category: "Automation"
+readTime: "8 min read"
+applicableScore: 9
+learningCurve: "Moderate"
+sourceLink: "https://atsell.io/how-we-rank"
+---
+
+## The problem
+
+Someone in Singapore wants an ecommerce enabler. Three years ago they Googled it. Now a chunk of them open ChatGPT and type "best ecommerce enabler Singapore" — and take the three names it gives back.
+
+If you're not one of those three names, you don't get a second chance. There's no page two of an AI answer.
+
+Google Search Console tells you where you rank on Google. Nothing tells you whether ChatGPT says your name. So we built the thing that does.
+
+## What it actually does
+
+A Python script runs every morning at 8am. For each question in a list of 12, it asks every AI model we've configured, with web search turned on, and then parses the answer for five things:
+
+1. **Was Atsell mentioned at all?**
+2. **Was atsell.io cited as a source URL?**
+3. **Where in the answer did we appear** — first, third, eighth?
+4. **Did the sentence mentioning us read positive, neutral, or negative?**
+5. **Which competitors got named** in the same answer?
+
+Results append to a CSV. A dashboard regenerates itself after every run — score gauge, trend line, per-model breakdown, competitor frequency. No SaaS subscription, no third-party tool.
+
+## How we picked the 12 questions
+
+This is the part most people get wrong. The questions aren't keyword research. They're **buying questions** — what a real brand manager types when they have budget and a problem.
+
+We wrote them across four intent bands:
+
+**Category-defining** — *"Who is an ecommerce enabler in Singapore?"* Someone doesn't yet know the category exists. If we're not in this answer, we're invisible before the shortlist even forms.
+
+**Shortlist / superlative** — *"Best ecommerce enabler Singapore"*, *"Top ecommerce enablers in Singapore"*. Explicitly asking for a ranked list. These are the highest-stakes prompts — the model is literally being asked to name a shortlist, and it will name three to five companies.
+
+**Platform-specific** — *"Who can manage Shopee and Lazada stores in Singapore?"*, *"Who can manage TikTok Shop for brands in Singapore?"*, *"Best Shopee Lazada TikTok Shop agency Singapore"*. This is where the actual money is. A brand that already sells on Shopee and needs help is further down the funnel than someone asking what an enabler is.
+
+**Branded** — *"Atsell ecommerce enabler"*, *"Atsell Shopee Lazada TikTok Shop"*. Control questions. If the model can't describe us accurately when asked *by name*, that's a different and more urgent problem than not being recommended — it means the training data and the live web don't have a clear picture of what we do.
+
+The branded ones are the tell. Unbranded queries are competitive. Branded queries should be near-100%. Any gap there is a content problem we own entirely.
+
+## What each part of the score means
+
+The composite **AI Visibility Score** runs 0–100:
+
+```
+Score = (mention_share × 0.6) + (top3_share × 0.4)
+```
+
+**Mention share (60%)** — the percentage of the 12 questions where "Atsell" appears anywhere in the answer. This is weighted heaviest because it's binary and brutal: you're either in the consideration set or you aren't. A brand that gets mentioned in 8 of 12 answers is in a fundamentally different position than one mentioned in 2.
+
+**Top-3 share (40%)** — the percentage where we appear in the *first three positions* of the answer. Being named tenth in a list of twelve is barely better than not being named. AI answers get skimmed like search results; position carries real weight. We detect this by splitting the answer into numbered items, then bullets, then paragraphs, and finding which chunk we land in.
+
+Two more metrics get measured and logged every run but **do not currently affect the score**:
+
+**Citation share** — did `atsell.io` actually appear in the model's cited source URLs? This is different from being mentioned. The model can name you from training data without ever visiting your site. Citation means your page was retrieved and used *right now*, live.
+
+**Positive sentiment share** — does the sentence about us use words like "leading", "specialist", "trusted", or negative ones?
+
+## The mistake I found while writing this
+
+Here's the honest bit. The README documented the score as 40% mention / 30% citation / 20% top-3 / 10% sentiment. The code has always computed 60% mention / 40% top-3.
+
+They never matched. Citation and sentiment were being calculated, written to the CSV, drawn on the dashboard — and multiplied by zero.
+
+I made it worse before I found it. When I rebuilt the dashboard this week, I labelled the breakdown chart "40% of score / 30% of score / 20% of score / 10% of score" by copying the README without checking it against the code. So the dashboard was confidently displaying weights that nothing used.
+
+Both are corrected now — the docs and dashboard describe what actually runs. I deliberately did **not** change the formula itself, because changing how a metric is computed retroactively breaks every historical comparison. That's a decision to make on purpose, not as a cleanup.
+
+Citation share is the one that should probably carry the most weight. Being cited as a *source* is a stronger signal than being name-dropped from memory — it means the model went to your site to answer the question. Ours currently sits at **8%**. That's the real number to fix.
+
+## What the data says
+
+Latest run, 21 July, 12 questions across two models:
+
+| Model | Mention | Top-3 | Cited | Score |
+|---|---|---|---|---|
+| gpt-4o | 50% | 50% | 8% | **50.0** |
+| gpt-4o-mini | 67% | 50% | 8% | **60.0** |
+| Combined | 58% | 50% | 8% | **55.0** |
+
+Two things jump out.
+
+**Different models have different opinions about us.** gpt-4o-mini mentions Atsell in 8 of 12 answers; gpt-4o in 6. Same questions, same minute, different model — a 10-point score gap. Anyone reporting "our AI visibility score" from a single model is reporting one model's opinion, not reality.
+
+**The competitor list is measuring the wrong thing.** Top detected "competitors" this run: Lazada 18, Shopee 18, TikTok Shop 16. Those aren't competitors — they're the marketplaces we operate on, and of course they're named in every answer. The actual enabler competitors are far below: Ecomms 6, aCommerce 5, Anchanto 2, Synagie 2. The competitor list conflates platforms with rivals and needs splitting.
+
+## The part that actually surprised me
+
+The score is noisy. Badly.
+
+On 12 July we ran the identical script, same model, same 12 questions, three times within about seven minutes. The scores: **38.3, then 35.0, then 33.3.**
+
+Nothing changed. Not the prompts, not the model, not the website. A five-point spread from pure non-determinism — the model phrases its answer slightly differently, we land in paragraph four instead of paragraph two, the position heuristic scores it differently.
+
+The June runs were worse: 25.8, 27.5, then 41.7 within twenty minutes. A **sixteen-point** swing from noise.
+
+This changes how you're allowed to read the number. The score went from 33.3 on 12 July to 55.0 on 21 July, which looks like a huge win. It isn't — most of that is because we added a second model to the mix, and gpt-4o-mini simply likes us more. Comparing those two numbers directly is meaningless.
+
+**A single run's score is not a measurement. It's one sample from a noisy distribution.** Only the trend across many runs means anything, and only if the model mix stays constant. That's the entire reason it now runs daily instead of whenever someone remembers — you need the sample size.
+
+Any vendor selling you an "AI visibility score" off a one-time audit is selling you a coin flip with a decimal point.
+
+## What it costs
+
+Twelve questions × two models = 24 API calls per run, each with web search enabled. Roughly **$0.10–0.15 USD** per run (~$0.13–0.20 SGD). Call it **$4 USD a month** running daily.
+
+Adding Claude, Gemini, and Perplexity would take it to about five models — roughly $10 USD/month. Still less than one hour of an agency's time, for a daily read on whether AI recommends you.
+
+Build time was a few hours, most of it on the dashboard rather than the logic.
+
+## What's missing
+
+Being straight about the gaps:
+
+- **Only OpenAI is actually running.** The code supports Claude, Gemini, and Perplexity — it queries any provider whose API key is present. But only `OPENAI_API_KEY` is set, so three of the four are dormant. Perplexity matters most here; it's search-native and closest to how people actually research vendors.
+- **Citation share is measured and ignored.** Currently 8%, and unweighted. The most fixable gap.
+- **Position detection is regex, not semantic.** It splits on numbered lists, bullets, then paragraphs. A model that writes flowing prose instead of a list gets scored badly by a heuristic that expected a list.
+- **Sentiment is a keyword count.** It counts words like "leading" and "trusted" against "poor" and "unreliable". It has no idea about context or negation. Crude enough that I wouldn't act on it.
+- **We don't score competitors.** We count how often they're named, but never compute *their* visibility score. Knowing aCommerce scores 70 while we score 55 would be far more actionable than our number in isolation.
+- **The competitor list mixes platforms with rivals** — Shopee and Lazada shouldn't be in the same bucket as Anchanto and Synagie.
+- **The daily scheduled task is registered but unproven.** It's set for 8am under an interactive Windows logon, which I couldn't fire from inside a sandboxed session. First real proof comes tomorrow morning.
+- **No alerting.** If the score falls off a cliff, nothing tells anyone. It just sits in a CSV.
+
+## Why this transfers to the clinic side
+
+The exact same method works for Physio and Sole. The questions change, the machinery doesn't:
+
+*"Best physiotherapist in Singapore"*, *"Who treats plantar fasciitis in Singapore?"*, *"Physio clinic near Orchard"*, *"Best insoles for flat feet Singapore"*.
+
+Patients are already asking AI these questions instead of Googling. Same four intent bands — category-defining, shortlist, condition-specific, branded. Same score. Swap the 12 prompts and the competitor list, and it runs unchanged.
+
+## What's next
+
+1. **Add the Perplexity API key.** Search-native, closest to real vendor research, and the biggest blind spot right now.
+2. **Fold citation share into the score** — and rescore history from the raw CSV so the trend line stays honest.
+3. **Split the competitor list** into marketplaces vs actual enablers, and score competitors the same way we score ourselves.
+4. **Run each prompt three times per model and average it**, so the noise problem gets handled by the methodology instead of a caveat in a blog post.
+5. **Alert on a sustained drop** — a rolling seven-day average falling below a threshold, not a single bad run.
+
+The number is 55. I trust the direction of the trend line. I don't trust the 55.
