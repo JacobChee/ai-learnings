@@ -1,11 +1,11 @@
 ---
-title: "We measure whether ChatGPT recommends us. The number moves 15 points on its own."
-date: "2026-07-21"
-description: "A daily script asks 12 buying questions across multiple AI models and scores how often Atsell shows up. Here's the methodology, what each part of the score means, and why a single run's number is close to meaningless."
+title: "Gemini recommends us 100% of the time and has never read our site. Claude reads it constantly and barely mentions us."
+date: "2026-07-22"
+description: "We now track 5 AI models across 3 vendors asking whether they recommend Atsell. The models don't just disagree on the score — they disagree on the entire behaviour: which search engine feeds them, whether they cite us, whether they even know who we are. Full methodology, the numbers, and what to actually do about each one."
 category:
   - "Automation"
   - "Marketing"
-readTime: "8 min read"
+readTime: "10 min read"
 applicableScore: 9
 learningCurve: "Moderate"
 sourceLink: "https://atsell.io/how-we-rank"
@@ -23,7 +23,7 @@ Google Search Console tells you where you rank on Google. Nothing tells you whet
 
 ## What it actually does
 
-A Python script runs every morning at 8am. For each question in a list of 12, it asks every AI model we've configured, with web search turned on, and then parses the answer for five things:
+A Python script runs weekly (Monday, 8am — more on why it's not daily below). For each question in a list of 12, it asks every AI model we've configured — currently five, across three vendors — with web search turned on, and parses each answer for five things:
 
 1. **Was Atsell mentioned at all?**
 2. **Was atsell.io cited as a source URL?**
@@ -77,23 +77,51 @@ I made it worse before I found it. When I rebuilt the dashboard this week, I lab
 
 Both are corrected now — the docs and dashboard describe what actually runs. I deliberately did **not** change the formula itself, because changing how a metric is computed retroactively breaks every historical comparison. That's a decision to make on purpose, not as a cleanup.
 
-Citation share is the one that should probably carry the most weight. Being cited as a *source* is a stronger signal than being name-dropped from memory — it means the model went to your site to answer the question. Ours currently sits at **8%**. That's the real number to fix.
+Citation share is the one that should probably carry the most weight. Being cited as a *source* is a stronger signal than being name-dropped from memory — it means the model went to your site to answer the question. At the time this felt like a reasonable guess. A few days later, with Claude and Gemini both in the mix, it stopped being a guess — see below.
 
 ## What the data says
 
-Latest run, 21 July, 12 questions across two models:
+Latest full run, 12 questions across five models:
 
-| Model | Mention | Top-3 | Cited | Score |
-|---|---|---|---|---|
-| gpt-4o | 50% | 50% | 8% | **50.0** |
-| gpt-4o-mini | 67% | 50% | 8% | **60.0** |
-| Combined | 58% | 50% | 8% | **55.0** |
+| Model | Named | Top-3 | **Cited** | Branded prompts | Score |
+|---|---|---|---|---|---|
+| Gemini (`gemini-pro-latest`) | 100% | 58% | **0%** | 2/2 | **83.3** |
+| ChatGPT (`gpt-4o-mini`) | 67% | 42% | 8% | 1/2 | **56.7** |
+| Claude Opus (`claude-opus-4-8`) | 58% | 42% | **75%** | 2/2 | **51.7** |
+| ChatGPT (`gpt-4o`) | 42% | 33% | 8% | 1/2 | **38.3** |
+| Claude Sonnet (`claude-sonnet-5`) | 50% | 17% | **67%** | 2/2 | **36.7** |
+| **Blended** | 63% | 38% | 32% | — | **53.3** |
 
-Two things jump out.
+Three things jump out, and the third one changed how we think about this whole project.
 
-**Different models have different opinions about us.** gpt-4o-mini mentions Atsell in 8 of 12 answers; gpt-4o in 6. Same questions, same minute, different model — a 10-point score gap. Anyone reporting "our AI visibility score" from a single model is reporting one model's opinion, not reality.
+**Different models have wildly different opinions about us.** Score ranges from 38.3 to 83.3 — a 45-point spread — for the exact same 12 questions asked in the same run. Two models from the same vendor (`gpt-4o` vs `gpt-4o-mini`) disagree by 18 points on their own. Anyone reporting "our AI visibility score" from one model is reporting one model's opinion, not a market read.
 
-**The competitor list is measuring the wrong thing.** Top detected "competitors" this run: Lazada 18, Shopee 18, TikTok Shop 16. Those aren't competitors — they're the marketplaces we operate on, and of course they're named in every answer. The actual enabler competitors are far below: Ecomms 6, aCommerce 5, Anchanto 2, Synagie 2. The competitor list conflates platforms with rivals and needs splitting.
+**Gemini and Claude are opposite failure modes of the same problem.** Look at Mention vs Citation:
+
+- **Gemini names Atsell in every single answer (100%) but has never once cited atsell.io (0%).** It knows who we are and recommends us confidently — from memory. It has never actually read our site to answer these questions.
+- **Claude does the reverse.** It cites atsell.io in 67–75% of answers — reading our pages directly — but only names us in half of them, and rarely puts us in the top 3.
+
+These are not the same problem with a different number attached. "A model recommends you from memory" and "a model reads your site but isn't convinced" need completely different fixes, and neither fix touches the other model.
+
+**The competitor list was measuring the wrong thing — and we caught it.** The first version counted Shopee, Lazada, and TikTok Shop as "top competitors" because they show up in nearly every answer. They're not competitors, they're the marketplaces we operate on — counting them was like calling "Windows" a competitor to a software consultancy. We split them into a separate `MARKETPLACES` list and rebuilt the competitive benchmark against actual rival enablers only. Result: **Atsell scores 53.3 and ranks #1 of 11 real enablers named across the run**, ahead of aCommerce (29.3) and Synagie (24.7) by nearly 2×.
+
+## The engine behind each model — the part that actually tells you what to do
+
+This is the finding that turned "check your AI visibility" into "here's what to fix, per model." Every one of these AI assistants answers by searching the web through *someone else's* search index — and which index differs by vendor:
+
+| Model | Search engine behind it | What that means for us |
+|---|---|---|
+| ChatGPT | **Bing** | Optimizing for Google doesn't move this number. Bing Webmaster Tools, sitemap submission, IndexNow. |
+| Gemini | **Google Search** (same pipeline as AI Overviews) | Classic Google SEO is the lever — rank organically, win the Overview. |
+| Claude | **Brave Search** | A different crawler again. Crawlability and clean server-rendered HTML for Brave specifically. |
+| Perplexity (dormant) | **Its own index** | Runs its own crawler; rewards quotable, factual sentences it can lift directly. |
+
+Once you see it this way, Gemini's 100%-named-0%-cited pattern makes complete sense: Gemini is grounded in Google, and we already rank reasonably on Google, so Google's index has plenty of *signal* that Atsell exists and is credible — enough for Gemini to recommend us confidently without needing to fetch our page mid-answer. Claude runs on Brave, a much smaller index, so when Brave *does* surface our pages, Claude reads them directly and cites them — but Brave's index has less of the third-party "who's good at this" signal that would make Claude confident enough to actually recommend us.
+
+So "improve our AI visibility" isn't one task. It's three, and they don't share a fix:
+- **For Gemini:** we're already winning; defend the Google ranking, push for top-3 position.
+- **For Claude:** our content reaches it; the gap is credibility signal (backlinks, third-party mentions) that Brave's index doesn't have much of yet.
+- **For ChatGPT:** weakest across the board and untested on the Bing side — Bing Webmaster Tools is not even set up yet.
 
 ## The part that actually surprised me
 
@@ -105,32 +133,38 @@ Nothing changed. Not the prompts, not the model, not the website. A five-point s
 
 The June runs were worse: 25.8, 27.5, then 41.7 within twenty minutes. A **sixteen-point** swing from noise.
 
-This changes how you're allowed to read the number. The score went from 33.3 on 12 July to 55.0 on 21 July, which looks like a huge win. It isn't — most of that is because we added a second model to the mix, and gpt-4o-mini simply likes us more. Comparing those two numbers directly is meaningless.
-
-**A single run's score is not a measurement. It's one sample from a noisy distribution.** Only the trend across many runs means anything, and only if the model mix stays constant. That's the entire reason it now runs daily instead of whenever someone remembers — you need the sample size.
+This changes how you're allowed to read the number. Comparing two scores across runs is only valid if the model mix is identical — the blended score jumped from 33.3 to 53.3 partly from real improvement and partly from adding three more models to the average. **A single run's score is not a measurement. It's one sample from a noisy distribution.** Only the trend, model-by-model, means anything.
 
 Any vendor selling you an "AI visibility score" off a one-time audit is selling you a coin flip with a decimal point.
 
-## What it costs
+## Why it's weekly, not daily
 
-Twelve questions × two models = 24 API calls per run, each with web search enabled. Roughly **$0.10–0.15 USD** per run (~$0.13–0.20 SGD). Call it **$4 USD a month** running daily.
+The build started daily. Then Claude's real cost showed up: ~29,600 input tokens and 4 billable web searches *per prompt*, because Claude runs several search rounds and each search result gets fed back into context. Measured cost: **~$0.25/prompt on Opus**, ~$0.17 on Sonnet. Twelve prompts × two Claude models × daily would be roughly **$90–105/month** on Claude alone.
 
-Adding Claude, Gemini, and Perplexity would take it to about five models — roughly $10 USD/month. Still less than one hour of an agency's time, for a daily read on whether AI recommends you.
+Switched to weekly. Same 12 prompts, all 5 models, ~$15/month total — and the run-to-run noise problem means daily samples weren't buying much statistical power anyway; a slower cadence over a longer trend is the same information for a fraction of the cost.
 
-Build time was a few hours, most of it on the dashboard rather than the logic.
+## What broke, twice — and the fix that actually matters
+
+Two things went wrong building this that are worth being honest about, because the second one is a lesson bigger than this project.
+
+**First: a completed run, and the money spent on it, got thrown away by a print statement.** All 60 API calls for a run finished successfully. Then the script tried to print a `⚠` character to the console, Windows' default encoding couldn't handle it, and the whole process crashed — *after* the paid work was done but *before* it was saved to disk. ~$5 of real API calls, gone, with zero data to show for it.
+
+**Second: it happened again**, in a different shape, while resuming that same work later. A merge job was killed mid-run (credits ran out) and only saved its results in one batch at the very end — so the handful of calls that had already completed before the kill were also paid for and lost.
+
+The actual fix wasn't "catch that specific error." It was a structural rule: **write every paid result to disk the instant it arrives, before anything else runs.** Now every API response is appended to the CSV immediately — not batched, not buffered until the end. Console output, scoring, dashboard generation all happen strictly *after*. An interrupt, a crash, a Unicode error, running out of credits — none of it can discard a call that was already paid for. The resume logic also skips any (model, prompt) pair already on disk, so restarting a run never re-pays for work that succeeded.
+
+If you're building anything that spends real money per API call, this is the rule: persist before you do anything derived, especially before anything that can raise an exception for a dumb reason like console encoding.
 
 ## What's missing
 
 Being straight about the gaps:
 
-- **Only OpenAI is actually running.** The code supports Claude, Gemini, and Perplexity — it queries any provider whose API key is present, with web search enabled on each. But only `OPENAI_API_KEY` is set, so three of the four are dormant. This is the biggest gap by far: two models from the same vendor already disagree about us by 10 points, so a score built on one provider is one company's opinion, not a market read.
-- **Citation share is measured and ignored.** Currently 8%, and unweighted. The most fixable gap.
-- **Position detection is regex, not semantic.** It splits on numbered lists, bullets, then paragraphs. A model that writes flowing prose instead of a list gets scored badly by a heuristic that expected a list.
-- **Sentiment is a keyword count.** It counts words like "leading" and "trusted" against "poor" and "unreliable". It has no idea about context or negation. Crude enough that I wouldn't act on it.
-- **We don't score competitors.** We count how often they're named, but never compute *their* visibility score. Knowing aCommerce scores 70 while we score 55 would be far more actionable than our number in isolation.
-- **The competitor list mixes platforms with rivals** — Shopee and Lazada shouldn't be in the same bucket as Anchanto and Synagie.
-- **The daily scheduled task is registered but unproven.** It's set for 8am under an interactive Windows logon, which I couldn't fire from inside a sandboxed session. First real proof comes tomorrow morning.
-- **No alerting.** If the score falls off a cliff, nothing tells anyone. It just sits in a CSV.
+- **Perplexity is still dormant.** It's the one search-native model in the set — worth adding specifically because it always cites sources, which would stress-test our 32% blended citation rate the hardest.
+- **Sentiment is a keyword count.** It counts words like "leading" and "trusted" against "poor" and "unreliable". No context or negation handling. Crude enough that I wouldn't act on it.
+- **Position detection is regex, not semantic.** It splits on numbered lists, bullets, then paragraphs. A model that writes flowing prose instead of a list gets scored less reliably than one that writes a numbered list.
+- **Citation share is measured but still unweighted in the score.** Given what this run showed — Claude's whole story lives in that number — this is now the highest-priority fix, not a nice-to-have.
+- **The weekly Windows scheduled task is configured but its trigger is still unproven** from inside an automated session — first real confirmation is whenever it fires unattended and I check the log after.
+- **No alerting.** If a model's score falls off a cliff, nothing tells anyone. It just sits in a CSV until someone opens the dashboard.
 
 ## Why this transfers to the clinic side
 
@@ -142,15 +176,11 @@ Patients are already asking AI these questions instead of Googling. Same four in
 
 ## What's next
 
-1. **Turn on the other three models.** The code already queries any provider with a key present — all that's missing are the keys. Each one is a different audience, not a duplicate of ChatGPT:
-   - **Claude** — what a lot of people doing actual vendor research and procurement work in. Answers tend to be more cautious and better sourced, which usually means fewer names in the shortlist. Being one of them matters more.
-   - **Gemini** — closest proxy for what Google's AI Overviews will say, and default on most Android phones in Singapore and across SEA. Probably the widest consumer reach of the four.
-   - **Perplexity** — search-native, always cites sources, and the one where our 8% citation share gets tested hardest. If our pages aren't retrievable, this is where it shows.
+1. **Add Perplexity.** The code already queries any provider with a key present — this is a `.env` line, not a rebuild. It's the model most likely to expose whether our content is actually retrievable, since it cites almost everything.
+2. **Act on Bing specifically for ChatGPT.** Unlike Gemini (already winning via Google) and Claude (already reading us via Brave), ChatGPT's Bing side has had zero dedicated work. Bing Webmaster Tools + sitemap + IndexNow is the concrete next step, not a vague "improve SEO."
+3. **Fold citation share into the score** — and rescore history from the raw CSV so the trend line stays honest. This run made the case for it directly: Claude's entire story is invisible in a mention-only score.
+4. **Score competitors with the same benchmark**, tracked over time — not just this run's snapshot, so we can see if aCommerce and Synagie are gaining or losing ground the same way we are.
+5. **Run each prompt multiple times per model and average it**, so the noise problem gets handled by the methodology instead of a caveat in a blog post.
+6. **Alert on a sustained drop** — a rolling multi-week average falling below a threshold, not a single bad run.
 
-   Getting all four running matters more than any single one: right now we're reporting one company's opinion of us and calling it "AI visibility". The whole point of the per-model chart is to see where we're strong and where we're invisible — with one provider, that chart has nothing to compare.
-2. **Fold citation share into the score** — and rescore history from the raw CSV so the trend line stays honest.
-3. **Split the competitor list** into marketplaces vs actual enablers, and score competitors the same way we score ourselves.
-4. **Run each prompt three times per model and average it**, so the noise problem gets handled by the methodology instead of a caveat in a blog post.
-5. **Alert on a sustained drop** — a rolling seven-day average falling below a threshold, not a single bad run.
-
-The number is 55. I trust the direction of the trend line. I don't trust the 55.
+The blended number is 53.3. I don't trust that number on its own — I trust that Gemini recommends us from memory, Claude reads our site but isn't sold, and ChatGPT hasn't been worked on at all. Those three sentences are more useful than any single score will ever be.
