@@ -1,0 +1,315 @@
+---
+title: "We connected WhatsApp to an AI agent — and learned the hard part is not the bot, it is the operations"
+date: "2026-07-23"
+description: "We connected a normal WhatsApp number to Hermes so it can answer Afix enquiries using website pricing and service rules. The big learning: the AI reply is easy; the real work is keeping the customer chat clean, avoiding wrong assumptions, and knowing when humans should take over."
+category:
+  - "Agents"
+  - "Customer Support"
+readTime: "7 min read"
+applicableScore: 8
+learningCurve: "Moderate"
+---
+
+We connected the Afix WhatsApp number to Hermes so incoming customer enquiries can be answered by an AI agent.
+
+This is not using Meta's official WhatsApp Business Cloud API. We used the normal WhatsApp linked-device route — basically like connecting WhatsApp Web by scanning a QR code.
+
+That made setup fast. But the real learning was not just "can AI reply?" The real learning was: **can we make the chat feel clean, useful, and safe enough for actual customers?**
+
+## What we built
+
+The backend flow is:
+
+```text
+Customer messages Afix on WhatsApp
+        ↓
+Afix WhatsApp number receives it
+        ↓
+Hermes WhatsApp bridge reads the message
+        ↓
+Hermes AI agent replies using Afix rules/pricing
+        ↓
+Reply is sent back through WhatsApp
+```
+
+We also kept Telegram connected as an operator/admin channel, while WhatsApp is the customer-facing channel.
+
+The bot was given Afix-specific knowledge from afix.sg, including:
+
+- Aircon servicing pricing
+- Chemical wash pricing
+- Annual care plan pricing
+- Carpentry guide prices
+- Renovation and build-out service scope
+- Booking questions to ask
+- What not to quote
+- When to hand over to a human
+
+## Why we chose normal WhatsApp first
+
+We deliberately chose the normal WhatsApp bridge route because it is faster for a pilot.
+
+No Meta developer setup. No webhook approval. No template-message rules. Just scan a QR code under:
+
+```text
+WhatsApp → Settings → Linked Devices → Link a Device
+```
+
+For testing, this is the fastest path.
+
+But it has a clear limitation: the machine running Hermes must stay awake. If the PC sleeps, the bot stops replying. Long term, this should move to either:
+
+1. an always-on office mini PC,
+2. a cloud VPS, or
+3. the official WhatsApp Business Cloud API.
+
+For a pilot, normal WhatsApp is good enough. For production, we should not pretend it is the final architecture.
+
+## The first big issue: backend messages leaked into customer WhatsApp
+
+The first tests worked, but ugly backend messages appeared in the WhatsApp chat, such as:
+
+```text
+No home channel is set for WhatsApp...
+Reading skill business-whatsapp-responder
+Interrupting current task...
+Redirected current run...
+Gateway shutting down...
+```
+
+These are useful for an operator. They are terrible for customers.
+
+So we learned that a customer-facing AI channel needs a different configuration from an internal AI assistant.
+
+For WhatsApp, we turned off:
+
+- tool progress messages,
+- interim assistant messages,
+- long-running status messages,
+- busy/interrupt acknowledgements,
+- gateway restart/shutdown notices,
+- the default "Hermes Agent" reply prefix.
+
+The customer should only see the actual Afix reply. Nothing about tools, skills, gateway, iterations, or backend state.
+
+## The second big issue: wording matters more than expected
+
+A customer said something like:
+
+```text
+I need to wash 7 units at Orchard
+```
+
+The bot assumed "wash" meant chemical wash and quoted:
+
+```text
+7 units chemical wash = $50/unit, total $350
+```
+
+That was wrong.
+
+For Afix, **normal wash = normal servicing** unless the customer clearly asks for chemical wash or describes a problem that makes chemical wash relevant.
+
+So we added this rule:
+
+> Do not assume "wash" means chemical wash. "Normal wash", "aircon wash", "wash aircon", and "normal servicing" usually mean normal aircon servicing.
+
+Correct response should be:
+
+```text
+Normal servicing for 7 units is $25/unit, total $175.
+```
+
+Only quote chemical wash if the customer says chemical wash, deep cleaning, leaking, bad smell, mould, not cold, or very dirty units.
+
+This is a good example of why AI bots need business-specific language rules. Customers do not speak in neat service categories.
+
+## Current Afix pricing logic
+
+The bot should quote only published prices.
+
+### Normal aircon servicing / normal wash
+
+| Units | Price |
+|---:|---:|
+| 1 unit | $50 |
+| 2 units | $30/unit |
+| 3+ units | $25/unit |
+
+Example:
+
+```text
+7 units = 7 × $25 = $175
+```
+
+### Chemical wash
+
+| Units | Price |
+|---:|---:|
+| 1 unit | $60 |
+| 2+ units | $50/unit |
+
+Chemical wash should not be assumed from the word "wash" alone.
+
+### Carpentry guide pricing
+
+| Item | Guide price |
+|---|---:|
+| Kitchen upper cabinet | $132/ft |
+| Kitchen base cabinet | $132/ft, excluding countertop |
+| Kitchen island | $264/ft |
+| Bedroom wardrobe | $264/ft |
+| Wall-mounted TV console | $156/ft, minimum 5 ft, from $780 |
+| Floor-standing TV console | $180/ft, minimum 5 ft, from $900 |
+
+For renovation, repair parts, complex troubleshooting, and custom works, the bot should collect details and hand over to the team.
+
+## The bot's ideal role
+
+The bot should behave like a front-desk assistant, not a salesperson pretending to know everything.
+
+It can:
+
+- answer basic pricing,
+- explain service scope,
+- ask for number of units,
+- ask for location,
+- ask for preferred date/time,
+- ask for photos/videos when there is leakage, noise, or damage,
+- say the team will confirm the final slot or quote.
+
+It should not:
+
+- confirm final appointment slots,
+- promise same-day availability,
+- offer discounts,
+- invent prices for repair parts,
+- handle complaints fully by itself,
+- ask for payment details, OTPs, passwords, or sensitive documents,
+- continue talking after a human has clearly taken over.
+
+## Human takeover is still an open item
+
+For now, if a human from Afix steps into the WhatsApp chat, the bot may still reply later when the customer sends another message.
+
+That is acceptable for a pilot, but not ideal for production.
+
+The better future logic is:
+
+```text
+Human staff replies in customer chat
+        ↓
+Bot pauses that customer thread for 24 hours
+        ↓
+Customer replies during pause
+        ↓
+Bot stays silent
+```
+
+This prevents the bot from interrupting a real human conversation.
+
+Recommended rule:
+
+> Once a human intervenes, pause the bot for that customer for 24 hours or until manually resumed.
+
+## Website updates are not automatically reflected yet
+
+The bot's pricing knowledge came from afix.sg, but it does not magically update every time the website changes.
+
+So we added a scheduled crawler:
+
+```text
+Every Monday, 10am
+Check afix.sg for pricing/service changes
+Alert if something changed
+Do not auto-update customer-facing bot knowledge without review
+```
+
+This is safer than letting the bot silently change prices based on any website edit.
+
+## What worked well
+
+The setup proved that a small business can get a useful WhatsApp enquiry responder running quickly.
+
+The bot can already handle common messages like:
+
+```text
+How much for 3 aircons?
+```
+
+Expected answer:
+
+```text
+Hi, I'm Mr Afix 👋
+Normal servicing for 3 units is $25/unit, total $75.
+May I check your location and preferred date/time?
+```
+
+It can also handle basic service questions, collect customer details, and route complex issues to the team.
+
+## What still needs improvement
+
+Before using this heavily with real customers, we should improve:
+
+1. **Always-on hosting**  
+   Move from a sleeping PC to an always-on mini PC, VPS, or official API.
+
+2. **Human takeover logic**  
+   If staff replies manually, pause the bot in that chat.
+
+3. **Cleaner testing across many examples**  
+   Test more real customer phrasing, especially Singlish/short-form messages.
+
+4. **Better handling of ambiguous service words**  
+   Example: "wash" should default to normal servicing, not chemical wash.
+
+5. **Approved media library**  
+   If customers ask for photos of past work, the bot should only send approved Afix-owned images, not random web images.
+
+6. **Conversation review loop**  
+   Review the first 20–50 conversations and tighten the prompt based on real mistakes.
+
+## Main learning
+
+The AI is not the hard part.
+
+The hard part is the operating system around the AI:
+
+- what it is allowed to say,
+- what it must never say,
+- when it should stop,
+- how to keep backend noise out of customer chats,
+- how to avoid wrong assumptions from casual customer wording,
+- how to keep pricing current,
+- how to let humans take over cleanly.
+
+For Afix, the right role is simple:
+
+> AI handles first-line enquiries. Humans confirm bookings, discounts, complaints, and custom quotes.
+
+That is enough for now. Do not overbuild before real customer testing.
+
+## Next actions
+
+- Restart Hermes Gateway after every config change.
+- Test with 20 realistic WhatsApp messages.
+- Save bad replies and correct the rules.
+- Move hosting to an always-on machine before relying on it 24/7.
+- Add human takeover/pause logic if real chats show the bot interrupting staff.
+
+## Test prompts to keep using
+
+```text
+How much for 3 aircon?
+I need to wash 7 units at Orchard
+Aircon leaking, can help?
+Chemical wash how much for 2 units?
+Can come today?
+Got discount?
+Can send photos of your carpentry work?
+My aircon got burning smell
+```
+
+Each one tests a different failure mode.
+
+The goal is not to make the bot sound clever. The goal is to make it useful, safe, and clean enough that customers feel they are talking to Afix — not to software.
